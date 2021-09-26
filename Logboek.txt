@@ -1,0 +1,6 @@
+Week 1:
+
+- Het maken van een prototype in Figma
+- Documentatie lezen over React Native
+- Opzetten van de App
+- Experimenteren met React Native
