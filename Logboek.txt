@@ -4,3 +4,10 @@ Week 1:
 - Documentatie lezen over React Native
 - Opzetten van de App
 - Experimenteren met React Native
+
+Week 2:
+- Aanpassen Figma
+- Aanmaken Tabs
+- Aanmaken loginpagina
+- Installeren maps: Ik ben overgeschakeld van MapBox naar MapView van Google Maps omdat expo dit niet support
+- Maken SplashScreen

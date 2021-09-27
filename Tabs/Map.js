@@ -1,16 +1,20 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, Component } from "react";
-import { StyleSheet, Text, TextInputComponent, View } from "react-native";
-import MapboxGL from "@react-native-mapbox-gl/maps";
-
-MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
+import MapView from "react-native-maps";
+import {
+  StyleSheet,
+  Text,
+  TextInputComponent,
+  View,
+  Dimensions,
+} from "react-native";
 
 export function Map() {
   const [text, setText] = useState("");
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <View></View>
+      <MapView style={styles.map} />
     </View>
   );
 }
@@ -21,13 +25,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
   },
-  navbar: {
-    justifyContent: "space-evenly",
-    flexDirection: "row",
-  },
-  input: {
-    backgroundColor: "#E7E7E7",
-    borderRadius: 5,
-    height: 50,
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });

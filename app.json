@@ -5,7 +5,12 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "splash": {
+      "image": "./img/splash.png",
+      "backgroundColor": "#2CCB33",
+      "resizeMode": "contain"
+    }
   },
   "name": "spottyfind"
 }
