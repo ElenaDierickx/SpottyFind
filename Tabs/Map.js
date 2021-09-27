@@ -1,16 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInputComponent,
-  View,
-  TextInput,
-  Image,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useState, Component } from "react";
+import { StyleSheet, Text, TextInputComponent, View } from "react-native";
+import MapboxGL from "@react-native-mapbox-gl/maps";
+
+MapboxGL.setAccessToken("<YOUR_ACCESSTOKEN>");
 
 export function Map() {
   const [text, setText] = useState("");

@@ -3,14 +3,16 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
-  TextInputComponent,
   View,
   TextInput,
   Image,
+  Pressable,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Buttona } from "./Components/Button";
 
 export function Login() {
   const [username, setUsername] = useState("");
@@ -18,6 +20,9 @@ export function Login() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <View>
+        <Image style={styles.logo} source={require("./../img/logo.png")} />
+      </View>
       <View>
         <TextInput
           placeholder="Username"
@@ -30,7 +35,13 @@ export function Login() {
           onChangeText={(password) => setPassword(password)}
           defaultValue={password}
           style={styles.input}
+          secureTextEntry={true}
         />
+        <Buttona func={() => Alert.alert("Beep")}>Log in</Buttona>
+        <Pressable onPress={() => Alert.alert("Beep")}>
+          <Text style={styles.forgotPass}>Forgotten password?</Text>
+        </Pressable>
+        <Buttona func={() => Alert.alert("Beep")}>Create new account</Buttona>
       </View>
     </View>
   );
@@ -54,5 +65,31 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     paddingLeft: 5,
+  },
+  button: {
+    backgroundColor: "#2CCB33",
+    borderRadius: 5,
+    height: 50,
+    marginLeft: 20,
+    marginRight: 20,
+    paddingLeft: 5,
+    marginBottom: 10,
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontWeight: "bold",
+    fontSize: 24,
+    alignSelf: "center",
+    color: "#FFFFFF",
+  },
+  logo: {
+    alignSelf: "center",
+    width: 200,
+    height: 200,
+    marginBottom: 50,
+  },
+  forgotPass: {
+    textAlign: "center",
+    marginBottom: 50,
   },
 });
