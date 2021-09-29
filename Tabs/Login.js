@@ -12,7 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Buttona } from "./Components/Button";
+import { Button } from "./Components/Button";
 
 export function Login() {
   const [username, setUsername] = useState("");
@@ -37,11 +37,11 @@ export function Login() {
           style={styles.input}
           secureTextEntry={true}
         />
-        <Buttona func={() => Alert.alert("Beep")}>Log in</Buttona>
+        <Button func={() => Alert.alert("Beep")}>Log in</Button>
         <Pressable onPress={() => Alert.alert("Beep")}>
           <Text style={styles.forgotPass}>Forgotten password?</Text>
         </Pressable>
-        <Buttona func={() => Alert.alert("Beep")}>Create new account</Buttona>
+        <Button func={() => Alert.alert("Beep")}>Create new account</Button>
       </View>
     </View>
   );

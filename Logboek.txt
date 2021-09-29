@@ -11,3 +11,5 @@ Week 2:
 - Aanmaken loginpagina
 - Installeren maps: Ik ben overgeschakeld van MapBox naar MapView van Google Maps omdat expo dit niet support	
 - Maken SplashScreen
+- Het opzoeken en testen van de locatiegebruik
+- Prutsen met de mapview

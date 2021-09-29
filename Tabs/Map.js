@@ -1,22 +1,45 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, Component } from "react";
-import MapView from "react-native-maps";
-import {
-  StyleSheet,
-  Text,
-  TextInputComponent,
-  View,
-  Dimensions,
-} from "react-native";
+import React, { useState, Component, useEffect } from "react";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { SearchBar } from "react-native-elements";
+import * as Location from "expo-location";
+import { StyleSheet, View, Dimensions, Alert } from "react-native";
+import { LocationButton } from "./Components/Button";
 
 export function Map() {
-  const [text, setText] = useState("");
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <MapView style={styles.map} />
+      <MapView
+        showsMyLocationButton={false}
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        followUserLocation={true}
+        showsUserLocation={true}
+      />
+      <View>
+        <LocationButton
+          onPress={() => {
+            getLocation;
+            Alert.alert(location);
+          }}
+        />
+      </View>
     </View>
   );
+}
+
+async function getLocation() {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== "granted") {
+    setErrorMsg("Permission to access location was denied");
+    return;
+  }
+  let location = await Location.getLastKnownPositionAsync({});
+  setLocation(location);
 }
 
 const styles = StyleSheet.create({
@@ -26,7 +49,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    flex: 1,
   },
 });
