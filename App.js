@@ -13,7 +13,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Login } from "./Tabs/Login";
 import { Map } from "./Tabs/Map";
-import { LocationTest } from "./Tabs/Location";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,20 +20,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen
-          name="Login"
-          component={Login}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons
-                name="person-circle-outline"
-                color={color}
-                size={size}
-              ></Ionicons>
-            ),
-            headerShown: false,
-          }}
-        />
         <Tab.Screen
           name="Map"
           component={Map}
@@ -46,11 +31,15 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Location"
-          component={LocationTest}
+          name="Login"
+          component={Login}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="map-outline" color={color} size={size}></Ionicons>
+              <Ionicons
+                name="person-circle-outline"
+                color={color}
+                size={size}
+              ></Ionicons>
             ),
             headerShown: false,
           }}

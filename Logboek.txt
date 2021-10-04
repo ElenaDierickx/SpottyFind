@@ -1,11 +1,21 @@
 Week 1:
 
+Gedaan
+------
 - Het maken van een prototype in Figma
 - Documentatie lezen over React Native
 - Opzetten van de App
 - Experimenteren met React Native
 
+Bronnen
+---------
+- https://reactnative.dev/docs/getting-started
+- Google
+
 Week 2:
+
+Gedaan
+-------
 - Aanpassen Figma
 - Aanmaken Tabs
 - Aanmaken loginpagina
@@ -13,3 +23,21 @@ Week 2:
 - Maken SplashScreen
 - Het opzoeken en testen van de locatiegebruik
 - Prutsen met de mapview
+
+Problemen
+-------
+- De location knop lukt nog niet omdat de location wordt opgehaald nadat de map is geladen.
+
+Bronnen
+-------
+- Mapview: https://github.com/react-native-maps/react-native-maps, 
+- Google
+- Location: https://docs.expo.dev/versions/latest/sdk/location/
+
+Week 3:
+- Location button
+
+
+Opgeloste problemen
+--------
+- De map wordt nu geladen nadat de locatie voor het eerst is opgevraagd.

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, Pressable, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Pressable,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export function Button(props) {
@@ -37,15 +43,16 @@ const styles = StyleSheet.create({
   },
   location: {
     backgroundColor: "#2CCB33",
-    width: 75,
-    height: 75,
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
     borderRadius: 100,
+    top: 40,
+    right: 20,
+    position: "absolute",
   },
   buttonIcon: {
-    fontSize: 50,
+    fontSize: 30,
     color: "white",
   },
 });
