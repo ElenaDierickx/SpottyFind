@@ -36,8 +36,14 @@ Bronnen
 
 Week 3:
 - Location button
+- Database aanmaken met Firebase
 
 
 Opgeloste problemen
 --------
 - De map wordt nu geladen nadat de locatie voor het eerst is opgevraagd.
+
+Bronnen
+-------
+- Firebase: https://firebase.google.com/docs/database/web/start, https://rnfirebase.io/
+- Google
