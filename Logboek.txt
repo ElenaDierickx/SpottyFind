@@ -37,6 +37,8 @@ Bronnen
 Week 3:
 - Location button
 - Database aanmaken met Firebase
+- Nested Stacknavigaties leren en aanmaken
+- Usertests afnemen
 
 
 Opgeloste problemen

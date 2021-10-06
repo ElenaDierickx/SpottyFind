@@ -10,20 +10,26 @@ import {
   Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Button } from "./Components/Button";
+import { Button } from "../Components/Button";
 
-export function Login() {
+export function RegisterScreen({ navigation }) {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <View>
-        <Image style={styles.logo} source={require("./../img/logo.png")} />
+        <Image style={styles.logo} source={require("./../../img/logo.png")} />
       </View>
       <View>
+        <TextInput
+          placeholder="Email"
+          onChangeText={(email) => setEmail(email)}
+          defaultValue={email}
+          style={styles.input}
+        />
         <TextInput
           placeholder="Username"
           onChangeText={(username) => setUsername(username)}
@@ -37,11 +43,16 @@ export function Login() {
           style={styles.input}
           secureTextEntry={true}
         />
-        <Button func={() => Alert.alert("Beep")}>Log in</Button>
-        <Pressable onPress={() => Alert.alert("Beep")}>
-          <Text style={styles.forgotPass}>Forgotten password?</Text>
-        </Pressable>
-        <Button func={() => Alert.alert("Beep")}>Create new account</Button>
+        <TextInput
+          placeholder="Repeat password"
+          onChangeText={(repeatPassword) => setRepeatPassword(repeatPassword)}
+          defaultValue={password}
+          style={styles.input}
+          secureTextEntry={true}
+        />
+        <Button func={() => Alert.alert("Beep")}>Create</Button>
+        <Text style={styles.already}>Already have an account?</Text>
+        <Button func={() => navigation.navigate("LoginStack")}>Log in</Button>
       </View>
     </View>
   );
@@ -86,10 +97,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: 200,
     height: 200,
-    marginBottom: 50,
+    marginBottom: 20,
   },
-  forgotPass: {
+  already: {
     textAlign: "center",
-    marginBottom: 50,
+    marginTop: 20,
   },
 });
