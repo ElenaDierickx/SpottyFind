@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { LoginStackScreen } from "./Tabs/Logins/Login";
 import { Map } from "./Tabs/Map";
-import * as firebase from "firebase";
+import { initializeApp } from "firebase";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +21,7 @@ const firebaseConfig = {
     measurementId: "G-WY0BELDQQY",
 };
 
-export const app = firebase.initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 export default function App() {
     return (

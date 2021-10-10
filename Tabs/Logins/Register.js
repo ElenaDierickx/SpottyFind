@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../Components/Button";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../App";
+import { getAuth } from "firebase/auth";
 
 const auth = getAuth();
 
