@@ -45,6 +45,10 @@ Opgeloste problemen
 --------
 - De map wordt nu geladen nadat de locatie voor het eerst is opgevraagd.
 
+Problemen
+----------
+- getAuth van firebase is undefined ook al staat deze geimport
+
 Bronnen
 -------
 - Firebase: https://firebase.google.com/docs/database/web/start, https://rnfirebase.io/

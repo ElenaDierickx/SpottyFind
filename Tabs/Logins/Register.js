@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from "reac
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../Components/Button";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { app } from "../../App";
 
 const auth = getAuth();
 
