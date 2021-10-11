@@ -53,3 +53,10 @@ Bronnen
 -------
 - Firebase: https://firebase.google.com/docs/database/web/start, https://rnfirebase.io/
 - Google
+
+Week 4:
+    - 
+
+Bronnen
+-------
+- FIrebase: https://blog.jscrambler.com/how-to-integrate-firebase-authentication-with-an-expo-app

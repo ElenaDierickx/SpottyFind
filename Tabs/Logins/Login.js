@@ -13,11 +13,32 @@ import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { Button, GoToButton } from "./../Components/Button";
 import { RegisterScreen } from "./Register";
+import { LogoutScreen } from "./Logout";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Firebase from "../../Config/Firebase";
 
-function LoginScreen({ navigation }) {
-  const [username, setUsername] = useState("");
+const auth = Firebase.auth();
+
+export function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  const onLogin = async () => {
+    try {
+      if (email !== "" && password !== "") {
+        await auth
+          .signInWithEmailAndPassword(email, password)
+          .then((userCredentials) => {
+            var user = userCredentials.user;
+            console.log("signed in");
+          });
+      }
+    } catch (error) {
+      setLoginError(error.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -26,9 +47,9 @@ function LoginScreen({ navigation }) {
       </View>
       <View>
         <TextInput
-          placeholder="Username"
-          onChangeText={(username) => setUsername(username)}
-          defaultValue={username}
+          placeholder="Email"
+          onChangeText={(email) => setEmail(email)}
+          defaultValue={email}
           style={styles.input}
         />
         <TextInput
@@ -38,7 +59,7 @@ function LoginScreen({ navigation }) {
           style={styles.input}
           secureTextEntry={true}
         />
-        <Button func={() => Alert.alert("Beep")}>Log in</Button>
+        <Button func={onLogin}>Log in</Button>
         <Pressable onPress={() => Alert.alert("Beep")}>
           <Text style={styles.forgotPass}>Forgotten password?</Text>
         </Pressable>
@@ -49,31 +70,9 @@ function LoginScreen({ navigation }) {
         >
           Create new account
         </Button>
+        <Text>{loginError}</Text>
       </View>
     </View>
-  );
-}
-
-const LoginStack = createNativeStackNavigator();
-
-export function LoginStackScreen() {
-  return (
-    <LoginStack.Navigator>
-      <LoginStack.Screen
-        name="LoginStack"
-        component={LoginScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <LoginStack.Screen
-        name="RegisterStack"
-        component={RegisterScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </LoginStack.Navigator>
   );
 }
 
