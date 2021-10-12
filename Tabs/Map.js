@@ -21,7 +21,6 @@ export function Map() {
         }
         let location = await Location.getLastKnownPositionAsync({});
         setLocation(location);
-        console.log("oof");
     }
 
     return (
