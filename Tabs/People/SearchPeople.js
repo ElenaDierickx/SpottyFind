@@ -7,10 +7,9 @@ import Firebase from "../../Config/Firebase";
 
 export function SearchPeopleScreen({ navigation }) {
     const [searchInput, setSearchInput] = useState("");
-    const [users, setUsers] = useState("");
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        console.log("ea");
         if (searchInput) {
             Firebase.firestore()
                 .collection("users")
@@ -19,10 +18,12 @@ export function SearchPeopleScreen({ navigation }) {
                 .get()
                 .then((doc) => {
                     if (!doc.empty) {
+                        var usernames = [];
                         doc.forEach((doc) => {
-                            setUsers(doc.data().username);
-                            console.log("found");
+                            usernames.push(<Text>{doc.data().username}</Text>);
                         });
+
+                        setUsers(usernames);
                     } else {
                         console.log("not found");
                         setUsers();
@@ -32,8 +33,6 @@ export function SearchPeopleScreen({ navigation }) {
             setUsers();
         }
     }, [searchInput]);
-
-    function AllUsers() {}
 
     return (
         <View style={styles.container}>
@@ -45,9 +44,7 @@ export function SearchPeopleScreen({ navigation }) {
                     defaultValue={searchInput}
                     style={styles.input}
                 />
-                <View>
-                    <Text>{users}</Text>
-                </View>
+                <View>{users}</View>
                 <Text style={styles.followingText}>Following:</Text>
             </View>
         </View>
