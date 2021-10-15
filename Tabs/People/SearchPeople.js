@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Button, GoToButton, SmallButton, StatButton } from "./../Components/Button";
+import { Button, GoToButton, SmallButton, StatButton, UserButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 
 export function SearchPeopleScreen({ navigation }) {
@@ -19,13 +19,18 @@ export function SearchPeopleScreen({ navigation }) {
                 .then((doc) => {
                     if (!doc.empty) {
                         var usernames = [];
+                        var i = 0;
                         doc.forEach((doc) => {
-                            usernames.push(<Text>{doc.data().username}</Text>);
+                            usernames.push(
+                                <UserButton key={i} func={() => navigation.navigate("UserStack", { uid: doc.id })}>
+                                    {doc.data().username}
+                                </UserButton>
+                            );
+                            i++;
                         });
 
                         setUsers(usernames);
                     } else {
-                        console.log("not found");
                         setUsers();
                     }
                 });
