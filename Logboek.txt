@@ -55,8 +55,15 @@ Bronnen
 - Google
 
 Week 4:
-    - 
+    - Implementeren van authorisatie
+    - Aanmaken accountpagina
+    - Implementeren realtime database
+    - overschakelen van realtime firebase naar firestore
+    - Zoekfunctie maken om users op te zoeken
+
 
 Bronnen
 -------
 - FIrebase: https://blog.jscrambler.com/how-to-integrate-firebase-authentication-with-an-expo-app
+- authentication: https://firebase.google.com/docs/auth
+- Firestore: https://firebase.google.com/docs/firestore
