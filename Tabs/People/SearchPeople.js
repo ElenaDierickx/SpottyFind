@@ -19,10 +19,12 @@ import {
   UserButton,
 } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function SearchPeopleScreen({ navigation }) {
   const [searchInput, setSearchInput] = useState("");
   const [users, setUsers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   useEffect(() => {
     if (searchInput) {
@@ -49,7 +51,6 @@ export function SearchPeopleScreen({ navigation }) {
                 );
               i++;
             });
-
             setUsers(usernames);
           } else {
             setUsers();
@@ -59,6 +60,39 @@ export function SearchPeopleScreen({ navigation }) {
       setUsers();
     }
   }, [searchInput]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      var following = [];
+      Firebase.firestore()
+        .collection("following")
+        .where("follower", "==", Firebase.auth().currentUser.uid)
+        .get()
+        .then((doc) => {
+          var i = 0;
+          doc.forEach((doc) => {
+            Firebase.firestore()
+              .collection("users")
+              .doc(doc.data().following)
+              .get()
+              .then((user) => {
+                following.push(
+                  <UserButton
+                    key={i}
+                    func={() =>
+                      navigation.navigate("UserStack", { uid: user.id })
+                    }
+                  >
+                    {user.data().username}
+                  </UserButton>
+                );
+                i++;
+              });
+          });
+        });
+      setFollowing(following);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -72,6 +106,7 @@ export function SearchPeopleScreen({ navigation }) {
         />
         <View>{users}</View>
         <Text style={styles.followingText}>Following:</Text>
+        <View>{following}</View>
       </View>
     </View>
   );
@@ -97,5 +132,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontWeight: "bold",
     fontSize: 26,
+    marginBottom: 20,
   },
 });

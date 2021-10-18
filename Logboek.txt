@@ -80,6 +80,8 @@ Te doen
 
 Gedaan
 --------
-    -Volgfunctionaliteit
+    - Volgfunctionaliteit
+    - Weergave volgstats
+    - Kan eigen account niet opzoeken
     
 

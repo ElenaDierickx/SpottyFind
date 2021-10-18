@@ -26,7 +26,6 @@ export function AccountScreen({ navigation }) {
   const [following, setFollowing] = useState(0);
 
   const onRender = function () {
-    console.log("od");
     var user = Firebase.auth().currentUser;
     Firebase.firestore()
       .collection("users")
