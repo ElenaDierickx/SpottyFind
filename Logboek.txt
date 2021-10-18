@@ -2,57 +2,57 @@ Week 1:
 
 Gedaan
 ------
-- Het maken van een prototype in Figma
-- Documentatie lezen over React Native
-- Opzetten van de App
-- Experimenteren met React Native
+    - Het maken van een prototype in Figma
+    - Documentatie lezen over React Native
+    - Opzetten van de App
+    - Experimenteren met React Native
 
 Bronnen
 ---------
-- https://reactnative.dev/docs/getting-started
-- Google
+    - https://reactnative.dev/docs/getting-started
+    - Google
 
 Week 2:
 
 Gedaan
 -------
-- Aanpassen Figma
-- Aanmaken Tabs
-- Aanmaken loginpagina
-- Installeren maps: Ik ben overgeschakeld van MapBox naar MapView van Google Maps omdat expo dit niet support	
-- Maken SplashScreen
-- Het opzoeken en testen van de locatiegebruik
-- Prutsen met de mapview
+    - Aanpassen Figma
+    - Aanmaken Tabs
+    - Aanmaken loginpagina
+    - Installeren maps: Ik ben overgeschakeld van MapBox naar MapView van Google Maps omdat expo dit niet support	
+    - Maken SplashScreen
+    - Het opzoeken en testen van de locatiegebruik
+    - Prutsen met de mapview
 
 Problemen
 -------
-- De location knop lukt nog niet omdat de location wordt opgehaald nadat de map is geladen.
+    - De location knop lukt nog niet omdat de location wordt opgehaald nadat de map is geladen.
 
 Bronnen
 -------
-- Mapview: https://github.com/react-native-maps/react-native-maps, 
-- Google
-- Location: https://docs.expo.dev/versions/latest/sdk/location/
+    - Mapview: https://github.com/react-native-maps/react-native-maps, 
+    - Google
+    - Location: https://docs.expo.dev/versions/latest/sdk/location/
 
 Week 3:
-- Location button
-- Database aanmaken met Firebase
-- Nested Stacknavigaties leren en aanmaken
-- Usertests afnemen
+    - Location button
+    - Database aanmaken met Firebase
+    - Nested Stacknavigaties leren en aanmaken
+    - Usertests afnemen
 
 
 Opgeloste problemen
 --------
-- De map wordt nu geladen nadat de locatie voor het eerst is opgevraagd.
+    - De map wordt nu geladen nadat de locatie voor het eerst is opgevraagd.
 
 Problemen
 ----------
-- getAuth van firebase is undefined ook al staat deze geimport
+    - getAuth van firebase is undefined ook al staat deze geimport
 
 Bronnen
 -------
-- Firebase: https://firebase.google.com/docs/database/web/start, https://rnfirebase.io/
-- Google
+    - Firebase: https://firebase.google.com/docs/database/web/start, https://rnfirebase.io/
+    - Google
 
 Week 4:
     - Implementeren van authorisatie
@@ -64,6 +64,19 @@ Week 4:
 
 Bronnen
 -------
-- FIrebase: https://blog.jscrambler.com/how-to-integrate-firebase-authentication-with-an-expo-app
-- authentication: https://firebase.google.com/docs/auth
-- Firestore: https://firebase.google.com/docs/firestore
+    - FIrebase: https://blog.jscrambler.com/how-to-integrate-firebase-authentication-with-an-expo-app
+    - authentication: https://firebase.google.com/docs/auth
+    - Firestore: https://firebase.google.com/docs/firestore
+
+
+Week 5:
+
+Te doen
+-------
+
+- Accounts volgen
+- Profielfoto instellen
+- Usernames dat niet meer dan 1 keer gebruikt mogen worden
+- Volgers pagina
+    
+
