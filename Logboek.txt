@@ -73,10 +73,13 @@ Week 5:
 
 Te doen
 -------
+    - Accounts volgen
+    - Profielfoto instellen
+    - Usernames dat niet meer dan 1 keer gebruikt mogen worden
+    - Volgers pagina
 
-- Accounts volgen
-- Profielfoto instellen
-- Usernames dat niet meer dan 1 keer gebruikt mogen worden
-- Volgers pagina
+Gedaan
+--------
+    -Volgfunctionaliteit
     
 

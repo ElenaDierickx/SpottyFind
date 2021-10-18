@@ -32,7 +32,7 @@ export function UserScreen({ route, navigation }) {
       .where("following", "==", uid)
       .get()
       .then((doc) => {
-        if (doc) {
+        if (doc.size > 0) {
           setFollowing(true);
         }
       });
