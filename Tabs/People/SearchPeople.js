@@ -11,13 +11,7 @@ import {
   VirtualizedList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Button,
-  GoToButton,
-  SmallButton,
-  StatButton,
-  UserButton,
-} from "./../Components/Button";
+import { UserButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -61,36 +55,39 @@ export function SearchPeopleScreen({ navigation }) {
     }
   }, [searchInput]);
 
+  const getFollowing = async () => {
+    console.log("nu");
+    var following = [];
+    var i = 0;
+    var followingData = await Firebase.firestore()
+      .collection("following")
+      .where("follower", "==", Firebase.auth().currentUser.uid)
+      .get();
+    followingData.forEach(async (followingData) => {
+      var user = await Firebase.firestore()
+        .collection("users")
+        .doc(followingData.data().following)
+        .get();
+      console.log(i, ": ", user.data().username);
+      following.push(
+        <UserButton
+          key={i}
+          func={() => navigation.navigate("UserStack", { uid: user.id })}
+        >
+          {user.data().username}
+        </UserButton>
+      );
+      i++;
+    });
+
+    console.log("done");
+    console.log(following);
+    setFollowing(following);
+  };
+
   useFocusEffect(
     React.useCallback(() => {
-      var following = [];
-      Firebase.firestore()
-        .collection("following")
-        .where("follower", "==", Firebase.auth().currentUser.uid)
-        .get()
-        .then((doc) => {
-          var i = 0;
-          doc.forEach((doc) => {
-            Firebase.firestore()
-              .collection("users")
-              .doc(doc.data().following)
-              .get()
-              .then((user) => {
-                following.push(
-                  <UserButton
-                    key={i}
-                    func={() =>
-                      navigation.navigate("UserStack", { uid: user.id })
-                    }
-                  >
-                    {user.data().username}
-                  </UserButton>
-                );
-                i++;
-              });
-          });
-        });
-      setFollowing(following);
+      getFollowing();
     }, [])
   );
 
@@ -105,7 +102,7 @@ export function SearchPeopleScreen({ navigation }) {
           style={styles.input}
         />
         <View>{users}</View>
-        <Text style={styles.followingText}>Following:</Text>
+        <Text style={styles.followingText}>Following</Text>
         <View>{following}</View>
       </View>
     </View>
