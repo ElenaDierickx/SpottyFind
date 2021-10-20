@@ -87,5 +87,9 @@ Gedaan
 Problemen
 ------
     - Het lukt me niet om de following lijst weer te geven die verniewt wanneer de pagina wordt weergegeven.
+
+Oplossingen
+------
+    - Werken met Promises.all
     
 
