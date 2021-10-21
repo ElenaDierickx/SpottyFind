@@ -2,10 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Image } from "react-native";
 import { Button } from "../Components/Button";
-import Firebase from "../../Config/Firebase";
-
-const auth = Firebase.auth();
-const database = Firebase.firestore();
+import { createUser } from "../../utils/Authorisation";
 
 export function RegisterScreen({ navigation }) {
     const [username, setUsername] = useState("");
@@ -14,18 +11,12 @@ export function RegisterScreen({ navigation }) {
     const [loginError, setLoginError] = useState("");
 
     const onCreate = async () => {
-        try {
-            if (email !== "" && password !== "") {
-                await auth.createUserWithEmailAndPassword(email, password).then((user) => {
-                    database.collection("users").doc(user.user.uid).set({
-                        email: user.user.email,
-                        username: username,
-                    });
-                    navigation.navigate("Map");
-                });
-            }
-        } catch (error) {
-            setLoginError(error.message);
+        var error = await createUser(email, password, username);
+        console.log(error);
+        if (error) {
+            setLoginError(error);
+        } else {
+            navigation.navigate("Map");
         }
     };
 

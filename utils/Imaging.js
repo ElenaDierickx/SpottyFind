@@ -25,3 +25,8 @@ const upload = async (uri) => {
         .child("images/profiles/" + Firebase.auth().currentUser.uid);
     return ref.put(blob);
 };
+
+export const downloadImage = async () => {
+    let imageRef = Firebase.storage().ref("images/profiles/" + Firebase.auth().currentUser.uid);
+    return await imageRef.getDownloadURL();
+};

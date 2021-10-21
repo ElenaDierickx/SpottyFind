@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList } from "react-native";
+import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button, GoToButton, SmallButton, StatButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
-import { uploadImage } from "../../utils/ImageUploading";
+import { uploadImage, downloadImage } from "../../utils/Imaging";
 import { logOut } from "../../utils/Authorisation";
 
 export function AccountScreen({ navigation }) {
@@ -44,14 +44,17 @@ export function AccountScreen({ navigation }) {
 
     useFocusEffect(onRender);
 
+    const GetImage = async () => {
+        try {
+            var image = await downloadImage();
+            setImage(image);
+        } catch (error) {
+            setImage(false);
+        }
+    };
+
     useEffect(() => {
-        let imageRef = Firebase.storage().ref("images/profiles/" + Firebase.auth().currentUser.uid);
-        imageRef
-            .getDownloadURL()
-            .then((url) => {
-                setImage(url);
-            })
-            .catch((e) => console.log("getting downloadURL of image error => ", e));
+        GetImage();
     }, []);
 
     const logOutPress = () => {
@@ -90,9 +93,9 @@ export function AccountScreen({ navigation }) {
                 </View>
             </View>
             <View style={styles.statButtons}>
-                <StatButton func={logOut}>Spots</StatButton>
-                <StatButton func={logOut}>Followers</StatButton>
-                <StatButton func={logOut}>Following</StatButton>
+                <StatButton func={() => logOutPress()}>Spots</StatButton>
+                <StatButton func={() => logOutPress()}>Followers</StatButton>
+                <StatButton func={() => logOutPress()}>Following</StatButton>
             </View>
         </View>
     );

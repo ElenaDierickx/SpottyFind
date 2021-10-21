@@ -2,14 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
 import { Button, GoToButton } from "./../Components/Button";
-import { RegisterScreen } from "./Register";
-import { LogoutScreen } from "./Logout";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Firebase from "../../Config/Firebase";
-
-const auth = Firebase.auth();
+import { loginUser } from "../../utils/Authorisation";
 
 export function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
@@ -17,14 +11,11 @@ export function LoginScreen({ navigation }) {
     const [loginError, setLoginError] = useState("");
 
     const onLogin = async () => {
-        try {
-            if (email !== "" && password !== "") {
-                await auth.signInWithEmailAndPassword(email, password).then(() => {
-                    navigation.navigate("Map");
-                });
-            }
-        } catch (error) {
-            setLoginError(error.message);
+        var error = await loginUser(email, password);
+        if (error) {
+            setLoginError(error);
+        } else {
+            navigation.navigate("Map");
         }
     };
 
