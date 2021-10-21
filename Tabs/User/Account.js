@@ -5,11 +5,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { Button, GoToButton, SmallButton, StatButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
+import { uploadImage } from "../../utils/ImageUploading";
+import { logOut } from "../../utils/Authorisation";
 
 export function AccountScreen({ navigation }) {
     const [username, setUsername] = useState("");
     const [followers, setFollowers] = useState(0);
     const [following, setFollowing] = useState(0);
+    const [image, setImage] = useState(false);
 
     const onRender = function () {
         var user = Firebase.auth().currentUser;
@@ -41,23 +44,30 @@ export function AccountScreen({ navigation }) {
 
     useFocusEffect(onRender);
 
-    const logOut = async () => {
-        Firebase.auth()
-            .signOut()
-            .then(() => {
-                navigation.navigate("Map");
+    useEffect(() => {
+        let imageRef = Firebase.storage().ref("images/profiles/" + Firebase.auth().currentUser.uid);
+        imageRef
+            .getDownloadURL()
+            .then((url) => {
+                setImage(url);
             })
-            .catch((error) => {
-                console.log(error.msg);
-            });
+            .catch((e) => console.log("getting downloadURL of image error => ", e));
+    }, []);
+
+    const logOutPress = () => {
+        logOut().then(navigation.navigate("Map"));
     };
+
+    const imageToLoad = image ? { uri: image } : require("./../../img/account.png");
 
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
             <View>
-                <SmallButton func={logOut}>Log Out</SmallButton>
-                <Image style={styles.logo} source={require("./../../img/account.png")} />
+                <SmallButton func={() => logOutPress()}>Log Out</SmallButton>
+                <Pressable onPress={() => uploadImage()}>
+                    <Image style={styles.logo} source={imageToLoad} />
+                </Pressable>
             </View>
             <Text style={styles.username}>{username}</Text>
 
@@ -99,6 +109,8 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         marginTop: 20,
+
+        borderRadius: 100,
     },
     username: {
         textAlign: "center",

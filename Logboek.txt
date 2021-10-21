@@ -83,6 +83,7 @@ Gedaan
     - Volgfunctionaliteit
     - Weergave volgstats
     - Kan eigen account niet opzoeken
+    - Image uploading
 
 Problemen
 ------
@@ -91,5 +92,9 @@ Problemen
 Oplossingen
 ------
     - Werken met Promises.all
+
+Bronnen
+-------
+    - https://www.youtube.com/watch?v=KkZckepfm2Q
     
 

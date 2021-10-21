@@ -41,35 +41,6 @@ export function SearchPeopleScreen({ navigation }) {
         }
     }, [searchInput]);
 
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         console.log("fff");
-    //         var following = [];
-    //         var i = 0;
-    //         Firebase.firestore()
-    //             .collection("users")
-    //             .doc(Firebase.auth().currentUser.uid)
-    //             .collection("following")
-    //             .get()
-    //             .then((doc) => {
-    //                 doc.forEach((doc) => {
-    //                     doc.data()
-    //                         .following.get()
-    //                         .then((res) => {
-    //                             promises.push(promise);
-    //                             following.push(
-    //                                 <UserButton key={i} func={() => navigation.navigate("UserStack", { uid: res.id })}>
-    //                                     {res.data().username}
-    //                                 </UserButton>
-    //                             );
-    //                             console.log(res.data().username);
-    //                         });
-    //                     i++;
-    //                 });
-    //             });
-    //     }, [])
-    // );
-
     useFocusEffect(
         React.useCallback(() => {
             var following = [];
