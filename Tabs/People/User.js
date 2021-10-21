@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Button, GoToButton, SmallButton, StatButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
+import { getIsFollowing, getFollowerStat, getFollowingStat, getUser, unfollow, follow } from "../../utils/Firestore";
 
 export function UserScreen({ route, navigation }) {
     const { uid } = route.params;
@@ -13,72 +14,32 @@ export function UserScreen({ route, navigation }) {
     const [followingStat, setFollowingStat] = useState(0);
     const [followersStat, setFollowersStat] = useState(0);
 
-    const onRender = function () {
-        Firebase.firestore()
-            .collection("users")
-            .doc(Firebase.auth().currentUser.uid)
-            .collection("following")
-            .where("following", "==", Firebase.firestore().collection("users").doc(uid))
-            .get()
-            .then((doc) => {
-                if (doc.size > 0) {
-                    setFollowing(true);
-                }
-            });
-        Firebase.firestore()
-            .collection("users")
-            .doc(Firebase.auth().currentUser.uid)
-            .collection("following")
-            .get()
-            .then((doc) => {
-                setFollowersStat(doc.size);
-            });
-        Firebase.firestore()
-            .collection("users")
-            .doc(uid)
-            .collection("following")
-            .get()
-            .then((doc) => {
-                setFollowingStat(doc.size);
-            });
-        if (uid) {
-            Firebase.firestore()
-                .collection("users")
-                .doc(uid)
-                .get()
-                .then((doc) => {
-                    if (doc) {
-                        setUsername(doc.data().username);
-                    }
-                });
-        }
+    const onRender = async () => {
+        setFollowing(await getIsFollowing(uid));
+
+        setFollowingStat(await getFollowingStat(uid));
+
+        setFollowersStat(await getFollowerStat(uid));
+
+        var user = await getUser(uid);
+        setUsername(user.username);
     };
 
-    useFocusEffect(onRender);
+    useFocusEffect(
+        React.useCallback(() => {
+            onRender();
+        }, [])
+    );
 
     const followUser = async () => {
         if (following) {
-            var query = Firebase.firestore()
-                .collection("users")
-                .doc(Firebase.auth().currentUser.uid)
-                .collection("following")
-                .where("following", "==", Firebase.firestore().collection("users").doc(uid));
-            query.get().then(function (querySnapshot) {
-                querySnapshot.forEach(function (doc) {
-                    doc.ref.delete();
-                });
-                setFollowing(false);
-            });
+            unfollow(uid);
+            setFollowing(false);
         } else {
-            Firebase.firestore()
-                .collection("users")
-                .doc(Firebase.auth().currentUser.uid)
-                .collection("following")
-                .add({
-                    following: Firebase.firestore().collection("users").doc(uid),
-                })
-                .then(() => setFollowing(true));
+            follow(uid);
+            setFollowing(true);
         }
+        setFollowersStat(await getFollowerStat(uid));
     };
 
     return (

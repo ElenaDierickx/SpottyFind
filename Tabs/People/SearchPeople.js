@@ -5,68 +5,30 @@ import { Ionicons } from "@expo/vector-icons";
 import { UserButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
+import { getFollowingList, getUserSearch } from "../../utils/Firestore";
 
 export function SearchPeopleScreen({ navigation }) {
     const [searchInput, setSearchInput] = useState("");
     const [users, setUsers] = useState([]);
     const [following, setFollowing] = useState([]);
 
+    const getSearch = async () => {
+        var users = await getUserSearch(searchInput, navigation);
+        setUsers(users);
+    };
+
     useEffect(() => {
-        if (searchInput) {
-            Firebase.firestore()
-                .collection("users")
-                .where("username", ">=", searchInput)
-                .where("username", "<=", searchInput + "\uf8ff")
-                .get()
-                .then((doc) => {
-                    if (!doc.empty) {
-                        var usernames = [];
-                        var i = 0;
-                        doc.forEach((doc) => {
-                            if (doc.id != Firebase.auth().currentUser.uid)
-                                usernames.push(
-                                    <UserButton key={i} func={() => navigation.navigate("UserStack", { uid: doc.id })}>
-                                        {doc.data().username}
-                                    </UserButton>
-                                );
-                            i++;
-                        });
-                        setUsers(usernames);
-                    } else {
-                        setUsers();
-                    }
-                });
-        } else {
-            setUsers();
-        }
+        getSearch();
     }, [searchInput]);
+
+    const getFollowing = async () => {
+        var following = await getFollowingList(navigation);
+        setFollowing(following);
+    };
 
     useFocusEffect(
         React.useCallback(() => {
-            var following = [];
-            var i = 0;
-            Firebase.firestore()
-                .collection("users")
-                .doc(Firebase.auth().currentUser.uid)
-                .collection("following")
-                .get()
-                .then((doc) => {
-                    const promises = [];
-                    doc.forEach((doc) => {
-                        const promise = doc.data().following.get();
-                        promises.push(promise);
-                    });
-                    Promise.all(promises).then((results) => {
-                        results.map((result) => {
-                            following.push(
-                                <UserButton key={i} func={() => navigation.navigate("UserStack", { uid: result.id })}>
-                                    {result.data().username}
-                                </UserButton>
-                            );
-                        });
-                        setFollowing(following);
-                    });
-                });
+            getFollowing();
         }, [])
     );
 
