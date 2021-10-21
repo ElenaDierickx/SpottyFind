@@ -7,6 +7,7 @@ import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import { uploadImage, downloadImage } from "../../utils/Imaging";
 import { logOut } from "../../utils/Authorisation";
+import { getUser, getFollowerStat, getFollowingStat } from "../../utils/Firestore";
 
 export function AccountScreen({ navigation }) {
     const [username, setUsername] = useState("");
@@ -14,35 +15,21 @@ export function AccountScreen({ navigation }) {
     const [following, setFollowing] = useState(0);
     const [image, setImage] = useState(false);
 
-    const onRender = function () {
+    const onRender = async () => {
         var user = Firebase.auth().currentUser;
-        Firebase.firestore()
-            .collection("users")
-            .doc(user.uid)
-            .get()
-            .then((doc) => {
-                if (doc) {
-                    setUsername(doc.data().username);
-                }
-            });
-        Firebase.firestore()
-            .collection("users")
-            .doc(Firebase.auth().currentUser.uid)
-            .collection("following")
-            .get()
-            .then((doc) => {
-                setFollowing(doc.size);
-            });
-        Firebase.firestore()
-            .collectionGroup("following")
-            .where("following", "==", Firebase.firestore().collection("users").doc(user.uid))
-            .get()
-            .then((doc) => {
-                setFollowers(doc.size);
-            });
+        setFollowers(await getFollowerStat(user.uid));
+
+        setFollowing(await getFollowingStat(user.uid));
+
+        var userData = await getUser(user.uid);
+        setUsername(userData.username);
     };
 
-    useFocusEffect(onRender);
+    useFocusEffect(
+        React.useCallback(() => {
+            onRender();
+        }, [])
+    );
 
     const GetImage = async () => {
         try {
