@@ -3,10 +3,11 @@ import Firebase from "../Config/Firebase";
 import { UserButton } from "../Tabs/Components/Button";
 import { downloadImage } from "./Imaging";
 
-export const getFollowingList = async (navigation) => {
+export const getFollowingList = async (navigation, uid) => {
+    console.log(uid);
     var followingList = [];
     var i = 0;
-    var following = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).collection("following").get();
+    var following = await Firebase.firestore().collection("users").doc(uid).collection("following").get();
     var promises = [];
     following.forEach((following) => {
         const promise = following.data().following.get();

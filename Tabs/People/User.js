@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TextInput, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Button, GoToButton, SmallButton, StatButton } from "./../Components/Button";
+import { SmallButton, StatButton } from "./../Components/Button";
 import { useFocusEffect } from "@react-navigation/native";
 import { getIsFollowing, getFollowerStat, getFollowingStat, getUser, unfollow, follow } from "../../utils/Firestore";
 import { downloadImage } from "../../utils/Imaging";
+import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList } from "react-native";
+import Firebase from "../../Config/Firebase";
 
 export function UserScreen({ route, navigation }) {
     const { uid } = route.params;
@@ -91,7 +91,13 @@ export function UserScreen({ route, navigation }) {
             <View style={styles.statButtons}>
                 <StatButton func={followUser}>Spots</StatButton>
                 <StatButton func={followUser}>Followers</StatButton>
-                <StatButton func={followUser}>Following</StatButton>
+                <StatButton
+                    func={() => {
+                        navigation.navigate("FollowingStack", { uid: uid });
+                    }}
+                >
+                    Following
+                </StatButton>
             </View>
         </View>
     );

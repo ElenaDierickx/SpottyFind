@@ -78,7 +78,7 @@ export function AccountScreen({ navigation }) {
             <View style={styles.statButtons}>
                 <StatButton func={() => logOutPress()}>Spots</StatButton>
                 <StatButton func={() => logOutPress()}>Followers</StatButton>
-                <StatButton func={() => logOutPress()}>Following</StatButton>
+                <StatButton func={() => navigation.navigate("FollowingStack", { uid: Firebase.auth().currentUser.uid })}>Following</StatButton>
             </View>
         </View>
     );

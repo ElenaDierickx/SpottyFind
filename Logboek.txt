@@ -85,6 +85,7 @@ Gedaan
     - Kan eigen account niet opzoeken
     - Image uploading
     - Profielfoto's bij alle gebruikers
+    - Account following list
 
 Problemen
 ------

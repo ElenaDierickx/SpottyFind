@@ -30,7 +30,7 @@ export function StatButton(props) {
     return (
         <Pressable style={styles.StatButton} onPress={props.func}>
             <Text style={styles.StatButtonText}>{props.children}</Text>
-            <Text style={styles.StatButtonText}>></Text>
+            <Text style={styles.StatButtonText}>{">"}</Text>
         </Pressable>
     );
 }

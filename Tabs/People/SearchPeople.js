@@ -1,8 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { UserButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import { getFollowingList, getUserSearch } from "../../utils/Firestore";
@@ -22,7 +20,7 @@ export function SearchPeopleScreen({ navigation }) {
     }, [searchInput]);
 
     const getFollowing = async () => {
-        var following = await getFollowingList(navigation);
+        var following = await getFollowingList(navigation, Firebase.auth().currentUser.uid);
         setFollowing(following);
     };
 
