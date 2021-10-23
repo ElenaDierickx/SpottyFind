@@ -36,9 +36,11 @@ export function StatButton(props) {
 }
 
 export function UserButton(props) {
+    const imageToLoad = props.img ? { uri: props.img } : require("./../../img/account.png");
+
     return (
         <Pressable style={styles.UserButton} onPress={props.func}>
-            <Image style={styles.ProfilePicture} source={require("./../../img/account.png")} />
+            <Image style={styles.ProfilePicture} source={imageToLoad} />
             <Text style={styles.UserButtonText}>{props.children}</Text>
         </Pressable>
     );
@@ -121,5 +123,6 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         marginLeft: 20,
+        borderRadius: 100,
     },
 });

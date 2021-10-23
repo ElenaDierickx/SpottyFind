@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TextInput, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button, GoToButton, SmallButton, StatButton } from "./../Components/Button";
-import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import { getIsFollowing, getFollowerStat, getFollowingStat, getUser, unfollow, follow } from "../../utils/Firestore";
+import { downloadImage } from "../../utils/Imaging";
 
 export function UserScreen({ route, navigation }) {
     const { uid } = route.params;
@@ -13,6 +13,7 @@ export function UserScreen({ route, navigation }) {
     const [following, setFollowing] = useState(false);
     const [followingStat, setFollowingStat] = useState(0);
     const [followersStat, setFollowersStat] = useState(0);
+    const [image, setImage] = useState(false);
 
     const onRender = async () => {
         setFollowing(await getIsFollowing(uid));
@@ -30,6 +31,21 @@ export function UserScreen({ route, navigation }) {
             onRender();
         }, [])
     );
+
+    useEffect(() => {
+        GetImage();
+    }, []);
+
+    const GetImage = async () => {
+        try {
+            var image = await downloadImage(uid);
+            setImage(image);
+        } catch (error) {
+            setImage(false);
+        }
+    };
+
+    const imageToLoad = image ? { uri: image } : require("./../../img/account.png");
 
     const followUser = async () => {
         if (following) {
@@ -50,7 +66,7 @@ export function UserScreen({ route, navigation }) {
                     {!following && "Follow"}
                     {following && "Unfollow"}
                 </SmallButton>
-                <Image style={styles.logo} source={require("./../../img/account.png")} />
+                <Image style={styles.logo} source={imageToLoad} />
             </View>
             <Text style={styles.username}>{username}</Text>
 
@@ -92,6 +108,8 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         marginTop: 20,
+
+        borderRadius: 100,
     },
     username: {
         textAlign: "center",

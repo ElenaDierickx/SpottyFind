@@ -25,15 +25,9 @@ export function AccountScreen({ navigation }) {
         setUsername(userData.username);
     };
 
-    useFocusEffect(
-        React.useCallback(() => {
-            onRender();
-        }, [])
-    );
-
     const GetImage = async () => {
         try {
-            var image = await downloadImage();
+            var image = await downloadImage(Firebase.auth().currentUser.uid);
             setImage(image);
         } catch (error) {
             setImage(false);
@@ -41,6 +35,8 @@ export function AccountScreen({ navigation }) {
     };
 
     useEffect(() => {
+        onRender();
+
         GetImage();
     }, []);
 

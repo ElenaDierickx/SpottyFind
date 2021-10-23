@@ -1,20 +1,27 @@
 import React from "react";
 import Firebase from "../Config/Firebase";
 import { UserButton } from "../Tabs/Components/Button";
+import { downloadImage } from "./Imaging";
 
 export const getFollowingList = async (navigation) => {
     var followingList = [];
     var i = 0;
     var following = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).collection("following").get();
-    const promises = [];
+    var promises = [];
     following.forEach((following) => {
         const promise = following.data().following.get();
         promises.push(promise);
     });
     var results = await Promise.all(promises);
-    results.map((result) => {
+    promises = [];
+    results.forEach((result) => {
+        const promise = downloadImage(result.id);
+        promises.push(promise);
+    });
+    var images = await Promise.all(promises);
+    results.map(async (result) => {
         followingList.push(
-            <UserButton key={i} func={() => navigation.navigate("UserStack", { uid: result.id })}>
+            <UserButton key={i} img={images[i]} func={() => navigation.navigate("UserStack", { uid: result.id })}>
                 {result.data().username}
             </UserButton>
         );
@@ -33,15 +40,21 @@ export const getUserSearch = async (searchInput, navigation) => {
         if (!users.empty) {
             var usernames = [];
             var i = 0;
+            const promises = [];
+            users.forEach((user) => {
+                const promise = downloadImage(user.id);
+                promises.push(promise);
+            });
+            var images = await Promise.all(promises);
             users.forEach((user) => {
                 if (user.id != Firebase.auth().currentUser.uid) {
                     usernames.push(
-                        <UserButton key={i} func={() => navigation.navigate("UserStack", { uid: user.id })}>
+                        <UserButton key={i} img={images[i]} func={() => navigation.navigate("UserStack", { uid: user.id })}>
                             {user.data().username}
                         </UserButton>
                     );
-                    i++;
                 }
+                i++;
             });
             return usernames;
         } else {
