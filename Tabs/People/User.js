@@ -90,7 +90,13 @@ export function UserScreen({ route, navigation }) {
             </View>
             <View style={styles.statButtons}>
                 <StatButton func={followUser}>Spots</StatButton>
-                <StatButton func={followUser}>Followers</StatButton>
+                <StatButton
+                    func={() => {
+                        navigation.navigate("FollowersStack", { uid: uid });
+                    }}
+                >
+                    Followers
+                </StatButton>
                 <StatButton
                     func={() => {
                         navigation.navigate("FollowingStack", { uid: uid });

@@ -4,7 +4,6 @@ import { UserButton } from "../Tabs/Components/Button";
 import { downloadImage } from "./Imaging";
 
 export const getFollowingList = async (navigation, uid) => {
-    console.log(uid);
     var followingList = [];
     var i = 0;
     var following = await Firebase.firestore().collection("users").doc(uid).collection("following").get();
@@ -29,6 +28,37 @@ export const getFollowingList = async (navigation, uid) => {
         i++;
     });
     return followingList;
+};
+
+export const getFollowersList = async (navigation, uid) => {
+    var followerList = [];
+    var i = 0;
+    var promises = [];
+    var followers = await Firebase.firestore()
+        .collectionGroup("following")
+        .where("following", "==", Firebase.firestore().collection("users").doc(uid))
+        .get();
+    followers.forEach((follower) => {
+        const promise = follower.ref.parent.parent.get();
+        promises.push(promise);
+    });
+    var users = await Promise.all(promises);
+    promises = [];
+    users.forEach((user) => {
+        const promise = downloadImage(user.id);
+        promises.push(promise);
+    });
+    var images = await Promise.all(promises);
+    users.map((user) => {
+        followerList.push(
+            <UserButton key={i} img={images[i]} func={() => navigation.navigate("UserStack", { uid: user.id })}>
+                {user.data().username}
+            </UserButton>
+        );
+        i++;
+    });
+
+    return followerList;
 };
 
 export const getUserSearch = async (searchInput, navigation) => {
