@@ -43,6 +43,13 @@ export function AccountScreen({ navigation }) {
     }
   };
 
+  const ImageUploading = async () => {
+    var isSucces = await uploadImage();
+    if (isSucces) {
+      GetImage();
+    }
+  };
+
   useEffect(() => {
     onRender();
 
@@ -62,7 +69,7 @@ export function AccountScreen({ navigation }) {
       <StatusBar style="auto" />
       <View>
         <SmallButton func={() => logOutPress()}>Log Out</SmallButton>
-        <Pressable onPress={() => uploadImage()}>
+        <Pressable onPress={ImageUploading}>
           <Image style={styles.logo} source={imageToLoad} />
         </Pressable>
       </View>

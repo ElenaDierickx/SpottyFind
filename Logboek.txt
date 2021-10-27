@@ -99,12 +99,17 @@ Bronnen
 -------
     - https://www.youtube.com/watch?v=KkZckepfm2Q
     
-Week 5:
+Week 6:
 
 Te doen
 -------
-    - Account Followers list
+    - Navigatie bij de volgers en volgende lijsten.
+    - Niet jezelf kunnen volgen.
+    - Foto update zonder de app te herladen.
 
 Gedaan
 -------
+    - Werkende navigatie bij de volgers en volgende lijsten.
+    - Foto update als de gebruiker die veranderd.
+
 
