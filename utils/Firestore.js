@@ -11,24 +11,30 @@ export const getFollowingList = async (navigation, uid, account) => {
     .doc(uid)
     .collection("following")
     .get();
+
   var promises = [];
   following.forEach((following) => {
     const promise = following.data().following.get();
     promises.push(promise);
   });
   var results = await Promise.all(promises);
+
   promises = [];
   results.forEach((result) => {
     const promise = downloadImage(result.id);
     promises.push(promise);
   });
   var images = await Promise.all(promises);
+
   results.map(async (result) => {
     followingList.push(
       <UserButton
         key={i}
         img={images[i]}
         func={() => {
+          if (result.id == Firebase.auth().currentUser.uid) {
+            navigation.navigate("Account");
+          }
           if (account) {
             navigation.navigate("People", {
               screen: "UserStack",
@@ -57,23 +63,29 @@ export const getFollowersList = async (navigation, uid, account) => {
     .collectionGroup("following")
     .where("following", "==", Firebase.firestore().collection("users").doc(uid))
     .get();
+
   followers.forEach((follower) => {
     const promise = follower.ref.parent.parent.get();
     promises.push(promise);
   });
   var users = await Promise.all(promises);
+
   promises = [];
   users.forEach((user) => {
     const promise = downloadImage(user.id);
     promises.push(promise);
   });
   var images = await Promise.all(promises);
+
   users.map((user) => {
     followerList.push(
       <UserButton
         key={i}
         img={images[i]}
         func={() => {
+          if (user.id == Firebase.auth().currentUser.uid) {
+            navigation.navigate("Account");
+          }
           if (account) {
             navigation.navigate("People", {
               screen: "UserStack",

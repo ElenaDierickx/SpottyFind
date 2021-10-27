@@ -111,5 +111,6 @@ Gedaan
 -------
     - Werkende navigatie bij de volgers en volgende lijsten.
     - Foto update als de gebruiker die veranderd.
+    - Je gaat nu naar de Accountpagina als je op je eigen account drukt.
 
 
