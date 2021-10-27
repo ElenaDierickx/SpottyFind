@@ -4,40 +4,40 @@ import { StyleSheet, Text, View } from "react-native";
 import { getFollowersList } from "../../utils/Firestore";
 
 export function FollowersScreen({ route, navigation }) {
-    const { uid } = route.params;
-    const [followers, setFollowers] = useState([]);
+  const { uid, account } = route.params;
+  const [followers, setFollowers] = useState([]);
 
-    const getFollowers = async () => {
-        var followers = await getFollowersList(navigation, uid);
-        setFollowers(followers);
-    };
+  const getFollowers = async () => {
+    var followers = await getFollowersList(navigation, uid, account);
+    setFollowers(followers);
+  };
 
-    useEffect(() => {
-        getFollowers();
-    }, []);
+  useEffect(() => {
+    getFollowers();
+  }, []);
 
-    return (
-        <View style={styles.container}>
-            <StatusBar style="auto" />
-            <View>
-                <Text style={styles.followingText}>Following</Text>
-                <View>{followers}</View>
-            </View>
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <StatusBar style="auto" />
+      <View>
+        <Text style={styles.followingText}>Followers</Text>
+        <View>{followers}</View>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        justifyContent: "flex-start",
-        paddingTop: 50,
-    },
-    followingText: {
-        marginLeft: 20,
-        fontWeight: "bold",
-        fontSize: 26,
-        marginBottom: 20,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "flex-start",
+    paddingTop: 50,
+  },
+  followingText: {
+    marginLeft: 20,
+    fontWeight: "bold",
+    fontSize: 26,
+    marginBottom: 20,
+  },
 });
