@@ -20,28 +20,33 @@ export function Map() {
             return;
         }
         let location = await Location.getLastKnownPositionAsync({});
-        setLocation(location);
+        if (location) {
+            location.latitudeDelta = 0.2;
+            location.longitudeDelta = 0.2;
+            setLocation(location);
+        }
     }
+
+    const locationH = location ? location : { coords: { latitude: 50.8503, longitude: 4.3517 }, latitudeDelta: 2, longitudeDelta: 2 };
 
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
 
-            {location && (
-                <MapView
-                    showsMyLocationButton={false}
-                    provider={PROVIDER_GOOGLE}
-                    style={styles.map}
-                    followUserLocation={true}
-                    showsUserLocation={true}
-                    region={{
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude,
-                        latitudeDelta: 0.02,
-                        longitudeDelta: 0.02,
-                    }}
-                />
-            )}
+            <MapView
+                showsMyLocationButton={false}
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                followUserLocation={true}
+                showsUserLocation={true}
+                region={{
+                    latitude: locationH.coords.latitude,
+                    longitude: locationH.coords.longitude,
+                    latitudeDelta: locationH.latitudeDelta,
+                    longitudeDelta: locationH.longitudeDelta,
+                }}
+            />
+
             <LocationButton
                 onPress={() => {
                     getLocation();
