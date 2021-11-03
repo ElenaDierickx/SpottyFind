@@ -113,4 +113,10 @@ Gedaan
     - Foto update als de gebruiker die veranderd.
     - Je gaat nu naar de Accountpagina als je op je eigen account drukt.
 
+Week 7:
+
+Gedaan
+------
+    - 
+
 
