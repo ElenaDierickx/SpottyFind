@@ -117,6 +117,7 @@ Week 7:
 
 Gedaan
 ------
-    - 
+    - Kleur veranderd van de taskbar
+    - Bugfix wanneer je op je eigen account drukt
 
 

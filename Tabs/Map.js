@@ -3,11 +3,12 @@ import React, { useState, useEffect } from "react";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { StyleSheet, View, Dimensions, Alert, Text } from "react-native";
-import { LocationButton } from "./Components/Button";
+import { LocationButton, AddLocationButton } from "./Components/Button";
+import { AddLocationCard } from "./Components/Cards";
 
 export function Map() {
     const [location, setLocation] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
+    const [addLocationOn, setaddLocationOn] = useState(false);
 
     useEffect(() => {
         getLocation();
@@ -45,6 +46,11 @@ export function Map() {
                     latitudeDelta: locationH.latitudeDelta,
                     longitudeDelta: locationH.longitudeDelta,
                 }}
+                onPress={() => {
+                    if (addLocationOn) {
+                        setaddLocationOn(false);
+                    }
+                }}
             />
 
             <LocationButton
@@ -52,6 +58,20 @@ export function Map() {
                     getLocation();
                 }}
             />
+
+            <AddLocationButton
+                onPress={() => {
+                    setaddLocationOn(true);
+                }}
+            />
+
+            {addLocationOn && (
+                <AddLocationCard
+                    backFunc={() => {
+                        setaddLocationOn(false);
+                    }}
+                />
+            )}
         </View>
     );
 }
