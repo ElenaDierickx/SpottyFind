@@ -1,18 +1,52 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable, Image } from "react-native";
 import { CardButton } from "./Button";
 import { Ionicons } from "@expo/vector-icons";
+import { addLocationImage } from "../../utils/Imaging";
+import { addMarker } from "../../utils/MapHelper";
 
 export function AddLocationCard(props) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [image, setImage] = useState(null);
+    const [errorText, setErrorText] = useState("");
+    var imageContent;
+
+    const pressedImage = async () => {
+        var tempImage = await addLocationImage();
+        setImage(tempImage);
+    };
+
+    const create = async () => {
+        if (!image) {
+            setErrorText("Please add an image");
+        } else if (!description || !title) {
+            setErrorText("Please fill all fields");
+        } else {
+            var result = await addMarker(title, image, description);
+            if (result == "succes") {
+                props.backFunc();
+            } else {
+                setErrorText(result);
+            }
+        }
+    };
+
+    image
+        ? (imageContent = <Image style={styles.image} source={image} />)
+        : (imageContent = <Ionicons style={styles.cameraIcon} name="camera-outline"></Ionicons>);
 
     return (
         <View style={styles.addLocationCard}>
             <TextInput placeholder="Title" onChangeText={(title) => setTitle(title)} defaultValue={title} style={styles.input} maxLength={30} />
-            <View style={styles.cameraPlaceholder}>
-                <Ionicons style={styles.cameraIcon} name="camera-outline"></Ionicons>
-            </View>
+            <Pressable
+                onPress={() => {
+                    pressedImage();
+                }}
+                style={styles.cameraPlaceholder}
+            >
+                {imageContent}
+            </Pressable>
             <TextInput
                 placeholder="Description"
                 onChangeText={(description) => setDescription(description)}
@@ -21,9 +55,10 @@ export function AddLocationCard(props) {
                 multiline={true}
                 maxLength={255}
             />
+            <Text>{errorText}</Text>
             <View style={styles.buttons}>
                 <CardButton func={props.backFunc}>Back</CardButton>
-                <CardButton>Place</CardButton>
+                <CardButton func={create}>Place</CardButton>
             </View>
         </View>
     );
@@ -31,7 +66,7 @@ export function AddLocationCard(props) {
 
 const styles = StyleSheet.create({
     addLocationCard: {
-        height: 450,
+        height: 460,
         width: "95%",
         backgroundColor: "#FFFFFF",
         position: "absolute",
@@ -82,5 +117,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginTop: 20,
         justifyContent: "space-between",
+    },
+
+    image: {
+        height: 150,
+        borderRadius: 10,
+        width: "100%",
     },
 });
