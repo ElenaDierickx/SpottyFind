@@ -1,17 +1,46 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { StyleSheet, View, Dimensions, Alert, Text } from "react-native";
 import { LocationButton, AddLocationButton } from "./Components/Button";
-import { AddLocationCard } from "./Components/Cards";
+import { AddLocationCard } from "./Components/AddLocationCard";
+import { getMarkers } from "../utils/MapHelper";
+import { MarkerCard } from "./Components/MarkerCard";
 
 export function Map() {
     const [location, setLocation] = useState(null);
     const [addLocationOn, setaddLocationOn] = useState(false);
+    const [markers, setMarkers] = useState([]);
+    const [markerCard, setMarkerCard] = useState(null);
+
+    const gettingMarkers = async () => {
+        var markers = await getMarkers();
+        var index = 0;
+        var markerlist = [];
+
+        markers.forEach((marker) => {
+            markerlist.push(
+                <Marker
+                    key={index}
+                    coordinate={{ latitude: marker.data().location.coords.latitude, longitude: marker.data().location.coords.longitude }}
+                    title={marker.data().title}
+                    description={marker.data().description}
+                    onPress={() => {
+                        setMarkerCard(marker.data());
+                    }}
+                />
+            );
+            index++;
+        });
+
+        setMarkers(markerlist);
+    };
 
     useEffect(() => {
         getLocation();
+
+        gettingMarkers();
     }, []);
 
     async function getLocation() {
@@ -51,7 +80,9 @@ export function Map() {
                         setaddLocationOn(false);
                     }
                 }}
-            />
+            >
+                {markers}
+            </MapView>
 
             <LocationButton
                 onPress={() => {
@@ -72,6 +103,8 @@ export function Map() {
                     }}
                 />
             )}
+
+            {markerCard && <MarkerCard marker={markerCard} />}
         </View>
     );
 }

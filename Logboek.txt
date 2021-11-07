@@ -119,5 +119,7 @@ Gedaan
 ------
     - Kleur veranderd van de taskbar
     - Bugfix wanneer je op je eigen account drukt
+    - De mogelijkheid toegevoegd om een marker toe te voegen
+    - De mogelijkheid toegevoegd om markers op de kaart te zien
 
 
