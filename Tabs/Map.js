@@ -27,8 +27,6 @@ export function Map() {
                         latitude: marker.data().location.coords.latitude,
                         longitude: marker.data().location.coords.longitude,
                     }}
-                    title={marker.data().title}
-                    description={marker.data().description}
                     onPress={() => {
                         setMarkerCard(marker);
                     }}
