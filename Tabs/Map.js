@@ -7,133 +7,147 @@ import { LocationButton, AddLocationButton } from "./Components/Button";
 import { AddLocationCard } from "./Components/AddLocationCard";
 import { getMarkers } from "../utils/MapHelper";
 import { MarkerCard } from "./Components/MarkerCard";
+import Firebase from "../Config/Firebase";
+import { useFocusEffect } from "@react-navigation/native";
 
 export function Map() {
-    const [location, setLocation] = useState(null);
-    const [addLocationOn, setaddLocationOn] = useState(false);
-    const [markers, setMarkers] = useState([]);
-    const [markerCard, setMarkerCard] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [addLocationOn, setaddLocationOn] = useState(false);
+  const [markers, setMarkers] = useState([]);
+  const [markerCard, setMarkerCard] = useState(null);
+  var map;
 
-    const gettingMarkers = async () => {
-        var markers = await getMarkers();
-        var index = 0;
-        var markerlist = [];
+  const gettingMarkers = async () => {
+    var markers = await getMarkers();
+    var index = 0;
+    var markerlist = [];
 
-        markers.forEach((marker) => {
-            markerlist.push(
-                <Marker
-                    key={index}
-                    coordinate={{
-                        latitude: marker.data().location.coords.latitude,
-                        longitude: marker.data().location.coords.longitude,
-                    }}
-                    onPress={() => {
-                        setMarkerCard(marker);
-                    }}
-                />
-            );
-            index++;
-        });
+    markers.forEach((marker) => {
+      markerlist.push(
+        <Marker
+          key={index}
+          centerOffset={{ x: 0, y: 4 }}
+          coordinate={{
+            latitude: marker.data().location.coords.latitude,
+            longitude: marker.data().location.coords.longitude,
+          }}
+          onPress={() => {
+            setMarkerCard(marker);
+          }}
+        />
+      );
+      index++;
+    });
 
-        setMarkers(markerlist);
-    };
+    setMarkers(markerlist);
+  };
 
-    useEffect(() => {
-        getLocation();
+  useFocusEffect(
+    React.useCallback(() => {
+      getLocation();
+      gettingMarkers();
+    }, [])
+  );
 
-        gettingMarkers();
-    }, []);
-
-    async function getLocation() {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-            setErrorMsg("Permission to access location was denied");
-            return;
-        }
-        let location = await Location.getLastKnownPositionAsync({});
-        if (location) {
-            location.latitudeDelta = 0.2;
-            location.longitudeDelta = 0.2;
-            setLocation(location);
-        }
+  async function getLocation() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
     }
+    let location = await Location.getLastKnownPositionAsync({});
+    if (location) {
+      location.latitudeDelta = 0.2;
+      location.longitudeDelta = 0.2;
+      setLocation(location);
+    }
+  }
 
-    const locationH = location
-        ? location
-        : {
-              coords: { latitude: 50.8503, longitude: 4.3517 },
-              latitudeDelta: 2,
-              longitudeDelta: 2,
+  const locationH = location
+    ? location
+    : {
+        coords: { latitude: 50.8503, longitude: 4.3517 },
+        latitudeDelta: 2,
+        longitudeDelta: 2,
+      };
+
+  return (
+    <View style={styles.container}>
+      <StatusBar style="auto" />
+
+      <MapView
+        showsMyLocationButton={false}
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        followUserLocation={true}
+        showsUserLocation={true}
+        ref={(ref) => (map = ref)}
+        initialRegion={{
+          latitude: locationH.coords.latitude,
+          longitude: locationH.coords.longitude,
+          latitudeDelta: locationH.latitudeDelta,
+          longitudeDelta: locationH.longitudeDelta,
+        }}
+        onPress={() => {
+          if (addLocationOn) {
+            setaddLocationOn(false);
+          }
+          if (markerCard) {
+            setMarkerCard(null);
+          }
+        }}
+      >
+        {markers}
+      </MapView>
+
+      <LocationButton
+        onPress={() => {
+          getLocation();
+          let r = {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
           };
+          map.animateToRegion(r, 1000);
+        }}
+      />
+      {Firebase.auth().currentUser && (
+        <AddLocationButton
+          onPress={() => {
+            setaddLocationOn(true);
+          }}
+        />
+      )}
 
-    return (
-        <View style={styles.container}>
-            <StatusBar style="auto" />
+      {addLocationOn && (
+        <AddLocationCard
+          backFunc={() => {
+            setaddLocationOn(false);
+          }}
+        />
+      )}
 
-            <MapView
-                showsMyLocationButton={false}
-                provider={PROVIDER_GOOGLE}
-                style={styles.map}
-                followUserLocation={true}
-                showsUserLocation={true}
-                region={{
-                    latitude: locationH.coords.latitude,
-                    longitude: locationH.coords.longitude,
-                    latitudeDelta: locationH.latitudeDelta,
-                    longitudeDelta: locationH.longitudeDelta,
-                }}
-                onPress={() => {
-                    if (addLocationOn) {
-                        setaddLocationOn(false);
-                    }
-                    if (markerCard) {
-                        setMarkerCard(null);
-                    }
-                }}
-            >
-                {markers}
-            </MapView>
-
-            <LocationButton
-                onPress={() => {
-                    getLocation();
-                }}
-            />
-
-            <AddLocationButton
-                onPress={() => {
-                    setaddLocationOn(true);
-                }}
-            />
-
-            {addLocationOn && (
-                <AddLocationCard
-                    backFunc={() => {
-                        setaddLocationOn(false);
-                    }}
-                />
-            )}
-
-            {markerCard && (
-                <MarkerCard
-                    marker={markerCard}
-                    close={() => {
-                        setMarkerCard(null);
-                    }}
-                />
-            )}
-        </View>
-    );
+      {markerCard && (
+        <MarkerCard
+          marker={markerCard}
+          close={() => {
+            setMarkerCard(null);
+          }}
+        />
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        justifyContent: "center",
-    },
-    map: {
-        flex: 1,
-        zIndex: -1,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+  },
+  map: {
+    flex: 1,
+    zIndex: -1,
+  },
 });
