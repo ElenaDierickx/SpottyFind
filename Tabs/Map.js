@@ -15,6 +15,7 @@ export function Map() {
   const [addLocationOn, setaddLocationOn] = useState(false);
   const [markers, setMarkers] = useState([]);
   const [markerCard, setMarkerCard] = useState(null);
+  const [disabledMap, setDisabledMap] = useState(true);
   var map;
 
   const gettingMarkers = async () => {
@@ -76,6 +77,7 @@ export function Map() {
       <StatusBar style="auto" />
 
       <MapView
+        moveOnMarkerPress={false}
         showsMyLocationButton={false}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -88,9 +90,14 @@ export function Map() {
           latitudeDelta: locationH.latitudeDelta,
           longitudeDelta: locationH.longitudeDelta,
         }}
+        pitchEnabled={disabledMap}
+        zoomEnabled={disabledMap}
+        scrollEnabled={disabledMap}
+        rotateEnabled={disabledMap}
         onPress={() => {
           if (addLocationOn) {
             setaddLocationOn(false);
+            setDisabledMap(true);
           }
           if (markerCard) {
             setMarkerCard(null);
@@ -116,6 +123,15 @@ export function Map() {
         <AddLocationButton
           onPress={() => {
             setaddLocationOn(true);
+
+            setDisabledMap(false);
+            let r = {
+              latitude: location.coords.latitude - 0.0035,
+              longitude: location.coords.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            };
+            map.animateToRegion(r, 1000);
           }}
         />
       )}
@@ -123,12 +139,13 @@ export function Map() {
       {addLocationOn && (
         <AddLocationCard
           backFunc={() => {
+            setDisabledMap(true);
             setaddLocationOn(false);
           }}
         />
       )}
 
-      {markerCard && (
+      {markerCard && disabledMap && (
         <MarkerCard
           marker={markerCard}
           close={() => {
