@@ -95,6 +95,13 @@ export function Map() {
                 }}
                 onPress={() => {
                   if (disabledMap) {
+                    let r = {
+                      latitude: marker.location.coords.latitude - 0.0035,
+                      longitude: marker.location.coords.longitude,
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    };
+                    map.animateToRegion(r, 1000);
                     setMarkerCard(marker);
                   }
                 }}

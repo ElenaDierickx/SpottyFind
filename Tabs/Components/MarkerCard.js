@@ -26,7 +26,7 @@ export function MarkerCard(props) {
 
   useEffect(() => {
     onRender();
-  }, []);
+  }, [props.marker]);
 
   return (
     <View style={styles.markerCard}>
