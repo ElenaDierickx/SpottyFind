@@ -13,34 +13,14 @@ import { useFocusEffect } from "@react-navigation/native";
 export function Map() {
   const [location, setLocation] = useState(null);
   const [addLocationOn, setaddLocationOn] = useState(false);
-  const [markers, setMarkers] = useState([]);
+  const [markers, setMarkers] = useState(null);
   const [markerCard, setMarkerCard] = useState(null);
   const [disabledMap, setDisabledMap] = useState(true);
   var map;
 
   const gettingMarkers = async () => {
     var markers = await getMarkers();
-    var index = 0;
-    var markerlist = [];
-
-    markers.forEach((marker) => {
-      markerlist.push(
-        <Marker
-          key={index}
-          centerOffset={{ x: 0, y: 4 }}
-          coordinate={{
-            latitude: marker.data().location.coords.latitude,
-            longitude: marker.data().location.coords.longitude,
-          }}
-          onPress={() => {
-            setMarkerCard(marker);
-          }}
-        />
-      );
-      index++;
-    });
-
-    setMarkers(markerlist);
+    setMarkers(markers);
   };
 
   useFocusEffect(
@@ -104,7 +84,23 @@ export function Map() {
           }
         }}
       >
-        {markers}
+        {markers &&
+          markers.map((marker, index) => {
+            return (
+              <Marker
+                key={index}
+                coordinate={{
+                  latitude: marker.location.coords.latitude,
+                  longitude: marker.location.coords.longitude,
+                }}
+                onPress={() => {
+                  if (disabledMap) {
+                    setMarkerCard(marker);
+                  }
+                }}
+              />
+            );
+          })}
       </MapView>
 
       <LocationButton

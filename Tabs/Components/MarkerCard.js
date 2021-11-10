@@ -25,14 +25,13 @@ export function MarkerCard(props) {
   };
 
   useEffect(() => {
-    console.log("od");
     onRender();
   }, []);
 
   return (
     <View style={styles.markerCard}>
       <View style={styles.topView}>
-        <Text style={styles.title}>{props.marker.data().title}</Text>
+        <Text style={styles.title}>{props.marker.title}</Text>
         <Pressable onPress={props.close} style={styles.closeView}>
           <Ionicons style={styles.close} name="close"></Ionicons>
         </Pressable>
@@ -52,7 +51,7 @@ export function MarkerCard(props) {
         )}
       </View>
       <Text style={styles.descriptionTitle}>Description</Text>
-      <Text style={styles.description}>{props.marker.data().description}</Text>
+      <Text style={styles.description}>{props.marker.description}</Text>
     </View>
   );
 }
