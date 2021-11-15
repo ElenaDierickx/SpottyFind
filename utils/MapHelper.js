@@ -6,55 +6,63 @@ import { Touchable } from "react-native";
 import { Pressable } from "react-native";
 
 export const addMarker = async (title, image, description) => {
-  let { status } = await Location.requestForegroundPermissionsAsync();
-  if (status !== "granted") {
-    return "Please turn on your location";
-  }
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+        return "Please turn on your location";
+    }
 
-  let location = await Location.getLastKnownPositionAsync({});
-  if (location) {
-    var marker = await Firebase.firestore().collection("markers").add({
-      user: Firebase.auth().currentUser.uid,
-      title: title,
-      description: description,
-      location: location,
-    });
+    let location = await Location.getLastKnownPositionAsync({});
+    if (location) {
+        var marker = await Firebase.firestore().collection("markers").add({
+            user: Firebase.auth().currentUser.uid,
+            title: title,
+            description: description,
+            location: location,
+        });
 
-    uploadImage(image.uri, marker.id);
+        uploadImage(image.uri, marker.id);
 
-    return "succes";
-  } else {
-    return "Please turn on your location";
-  }
+        return "succes";
+    } else {
+        return "Please turn on your location";
+    }
 };
 
 const uploadImage = async (uri, id) => {
-  const response = await fetch(uri);
-  const blob = await response.blob();
+    const response = await fetch(uri);
+    const blob = await response.blob();
 
-  var ref = Firebase.storage()
-    .ref()
-    .child("images/markers/" + id);
-  return ref.put(blob);
+    var ref = Firebase.storage()
+        .ref()
+        .child("images/markers/" + id);
+    return ref.put(blob);
 };
 
 export const getMarkers = async () => {
-  var markers = await Firebase.firestore().collection("markers").get();
-  var markersList = [];
+    var markers = await Firebase.firestore().collection("markers").get();
+    var markersList = [];
 
-  markers.forEach((marker) => {
-    markerWID = marker.data();
-    markerWID.id = marker.id;
-    markersList.push(markerWID);
-  });
-  return markersList;
+    markers.forEach((marker) => {
+        markerWID = marker.data();
+        markerWID.id = marker.id;
+        markersList.push(markerWID);
+    });
+    return markersList;
 };
 
 export const getMarkerImage = async (id) => {
-  try {
-    let imageRef = Firebase.storage().ref("images/markers/" + id);
-    return await imageRef.getDownloadURL();
-  } catch (e) {
-    return null;
-  }
+    try {
+        let imageRef = Firebase.storage().ref("images/markers/" + id);
+        return await imageRef.getDownloadURL();
+    } catch (e) {
+        return null;
+    }
+};
+
+export const postReview = async (markerid, stars, review) => {
+    Firebase.firestore().collection("markers").doc(markerid).collection("reviews").add({
+        user: Firebase.auth().currentUser.uid,
+        score: stars,
+        review: review,
+    });
 };
