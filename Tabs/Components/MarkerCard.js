@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, Touchable, Pressable, TextInput } from "react-native";
-import { getMarkerImage, postReview } from "../../utils/MapHelper";
+import { getMarkerImage, postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "./Button";
 import Firebase from "../../Config/Firebase";
@@ -9,23 +9,58 @@ export function MarkerCard(props) {
     const [image, setImage] = useState(null);
     const [review, setReview] = useState(false);
     const [reviewText, setReviewText] = useState("");
-    const [stars, setStars] = useState(5);
+    const [stars, setStars] = useState(0);
+    const [reviewListing, setReviewListing] = useState(false);
+    const [reviewList, setReviewList] = useState(null);
+    const [score, setScore] = useState(null);
+    const [hasReviewed, setHasReviewed] = useState(null);
 
     const imageToLoad = image ? { uri: image } : require("./../../img/account.png");
 
     const onRender = async () => {
         const imageTemp = await getMarkerImage(props.marker.id);
         setImage(imageTemp);
+
+        var score = await getReviewScore(props.marker.id);
+        if (isNaN(score)) {
+            score = 0;
+        }
+        setScore(score);
+
+        const reviewed = await hasReview(props.marker.id);
+        setHasReviewed(reviewed);
+        if (reviewed) {
+            setReviewText(reviewed.review);
+            setStars(reviewed.score);
+        }
+    };
+
+    const getReviewList = async () => {
+        setReviewListing(true);
+        const reviews = await getReviews(props.marker.id);
+        setReviewList(reviews);
     };
 
     const placeReview = () => {
         postReview(props.marker.id, stars, reviewText);
         setReview(false);
+        getReviewList();
+    };
+
+    const editReview = () => {
+        updateReview(props.marker.id, hasReviewed.id, stars, reviewText);
+        setReview(false);
+        getReviewList();
     };
 
     useEffect(() => {
         onRender();
         setReview(false);
+        setReviewList(null);
+        setReviewListing(false);
+        setHasReviewed(null);
+        setReviewText("");
+        setStars(0);
     }, [props.marker]);
 
     return (
@@ -36,26 +71,31 @@ export function MarkerCard(props) {
                     <Ionicons style={styles.close} name="close"></Ionicons>
                 </Pressable>
             </View>
-            {!review && (
+            {!review && !reviewListing && (
                 <View>
                     <Image style={styles.image} source={imageToLoad} />
                     <View style={styles.reviewView}>
-                        <Text style={styles.score}>5</Text>
+                        <Text style={styles.score}>{score}</Text>
                         <View style={styles.stars}>
-                            <Ionicons style={styles.star} name="star"></Ionicons>
-                            <Ionicons style={styles.star} name="star"></Ionicons>
-                            <Ionicons style={styles.star} name="star"></Ionicons>
-                            <Ionicons style={styles.star} name="star"></Ionicons>
-                            <Ionicons style={styles.star} name="star"></Ionicons>
+                            {score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                            {score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                            {score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                            {score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                            {score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                            {score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                            {score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                            {score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                            {score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                            {score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
                         </View>
                         {Firebase.auth().currentUser && (
                             <CardButton
                                 style={styles.reviewButton}
                                 func={() => {
-                                    setReview(true);
+                                    getReviewList();
                                 }}
                             >
-                                Review
+                                Reviews
                             </CardButton>
                         )}
                     </View>
@@ -129,11 +169,72 @@ export function MarkerCard(props) {
                         <CardButton
                             func={() => {
                                 setReview(false);
+                                getReviewList();
                             }}
                         >
                             Back
                         </CardButton>
-                        <CardButton func={placeReview}>Place</CardButton>
+                        {hasReviewed && <CardButton func={editReview}>Edit</CardButton>}
+                        {!hasReviewed && <CardButton func={placeReview}>Place</CardButton>}
+                    </View>
+                </View>
+            )}
+            {reviewListing && (
+                <View>
+                    {reviewList &&
+                        reviewList.map((review, index) => {
+                            const imageToLoad = review.userdata.image ? { uri: review.userdata.image } : require("./../../img/account.png");
+                            return (
+                                <View style={styles.reviewContainer} key={index}>
+                                    <View style={styles.singleReview}>
+                                        <Image source={imageToLoad} style={styles.userImage} />
+                                        <Text style={styles.profileName}>{review.userdata.username}</Text>
+                                        <Text style={styles.score}>{review.score}</Text>
+                                        <View style={styles.starsSingle}>
+                                            {review.score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                        </View>
+                                    </View>
+                                    <Text style={styles.singleDescription}>{review.review}</Text>
+                                </View>
+                            );
+                        })}
+                    <View style={styles.buttons}>
+                        <CardButton
+                            func={() => {
+                                setReviewListing(false);
+                            }}
+                        >
+                            Back
+                        </CardButton>
+                        {hasReviewed && (
+                            <CardButton
+                                func={() => {
+                                    setReviewListing(false);
+                                    setReview(true);
+                                }}
+                            >
+                                Edit
+                            </CardButton>
+                        )}
+                        {!hasReviewed && (
+                            <CardButton
+                                func={() => {
+                                    setReviewListing(false);
+                                    setReview(true);
+                                }}
+                            >
+                                Place
+                            </CardButton>
+                        )}
                     </View>
                 </View>
             )}
@@ -158,7 +259,7 @@ const styles = StyleSheet.create({
     },
     image: {
         marginTop: 10,
-        width: 300,
+        width: 320,
         height: 200,
         borderRadius: 10,
     },
@@ -195,9 +296,17 @@ const styles = StyleSheet.create({
         marginTop: 60,
         marginBottom: 40,
     },
+    starsSingle: {
+        flexDirection: "row",
+        alignSelf: "center",
+        marginLeft: 10,
+    },
+    singleReview: {
+        flexDirection: "row",
+    },
     reviewButton: {
         alignSelf: "center",
-        marginLeft: 30,
+        marginLeft: 80,
         marginTop: 10,
     },
     topView: {
@@ -227,5 +336,29 @@ const styles = StyleSheet.create({
         marginTop: 20,
         textAlignVertical: "top",
         paddingTop: 5,
+    },
+    userImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 100,
+    },
+    profileName: {
+        alignSelf: "center",
+        marginLeft: 10,
+        fontWeight: "bold",
+        fontSize: 16,
+        marginRight: 40,
+    },
+    reviewContainer: {
+        marginTop: 10,
+    },
+    singleDescription: {
+        backgroundColor: "rgba(231, 231, 231, 0.2)",
+        borderRadius: 10,
+        height: 100,
+        width: "95%",
+        alignSelf: "center",
+        marginTop: 20,
+        padding: 10,
     },
 });

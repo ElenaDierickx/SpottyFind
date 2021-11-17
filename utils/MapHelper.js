@@ -4,6 +4,7 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import { Touchable } from "react-native";
 import { Pressable } from "react-native";
+import { downloadImage } from "./Imaging";
 
 export const addMarker = async (title, image, description) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -65,4 +66,60 @@ export const postReview = async (markerid, stars, review) => {
         score: stars,
         review: review,
     });
+};
+
+export const updateReview = async (markerid, reviewid, stars, review) => {
+    Firebase.firestore().collection("markers").doc(markerid).collection("reviews").doc(reviewid).update({
+        score: stars,
+        review: review,
+    });
+};
+
+export const getReviews = async (markerid) => {
+    const reviews = await Firebase.firestore().collection("markers").doc(markerid).collection("reviews").get();
+    var reviewList = [];
+    const userPromises = [];
+    const imagePromises = [];
+    reviews.forEach((review) => {
+        reviewList.push(review.data());
+        userPromises.push(Firebase.firestore().collection("users").doc(review.data().user).get());
+        imagePromises.push(downloadImage(review.data().user));
+    });
+    const users = await Promise.all(userPromises);
+    const userImages = await Promise.all(imagePromises);
+    var i = 0;
+    users.forEach((user) => {
+        reviewList[i].userdata = user.data();
+        i++;
+    });
+    i = 0;
+    userImages.forEach((image) => {
+        reviewList[i].userdata.image = image;
+    });
+    return reviewList;
+};
+
+export const getReviewScore = async (markerid) => {
+    const reviews = await Firebase.firestore().collection("markers").doc(markerid).collection("reviews").get();
+    var score = 0;
+    reviews.forEach((review) => {
+        score += review.data().score;
+    });
+    score = score / reviews.size;
+    return score;
+};
+
+export const hasReview = async (markerid) => {
+    var ownReview;
+    const reviews = await Firebase.firestore()
+        .collection("markers")
+        .doc(markerid)
+        .collection("reviews")
+        .where("user", "==", Firebase.auth().currentUser.uid)
+        .get();
+    reviews.forEach((review) => {
+        ownReview = review.data();
+        ownReview.id = review.id;
+    });
+    return ownReview;
 };
