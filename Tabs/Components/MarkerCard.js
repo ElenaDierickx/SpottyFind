@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Touchable, Pressable, TextInput } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
 import { getMarkerImage, postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "./Button";
@@ -27,11 +27,13 @@ export function MarkerCard(props) {
         }
         setScore(score);
 
-        const reviewed = await hasReview(props.marker.id);
-        setHasReviewed(reviewed);
-        if (reviewed) {
-            setReviewText(reviewed.review);
-            setStars(reviewed.score);
+        if (Firebase.auth().currentUser) {
+            const reviewed = await hasReview(props.marker.id);
+            setHasReviewed(reviewed);
+            if (reviewed) {
+                setReviewText(reviewed.review);
+                setStars(reviewed.score);
+            }
         }
     };
 
@@ -45,12 +47,14 @@ export function MarkerCard(props) {
         postReview(props.marker.id, stars, reviewText);
         setReview(false);
         getReviewList();
+        onRender();
     };
 
     const editReview = () => {
         updateReview(props.marker.id, hasReviewed.id, stars, reviewText);
         setReview(false);
         getReviewList();
+        onRender();
     };
 
     useEffect(() => {
@@ -75,18 +79,20 @@ export function MarkerCard(props) {
                 <View>
                     <Image style={styles.image} source={imageToLoad} />
                     <View style={styles.reviewView}>
-                        <Text style={styles.score}>{score}</Text>
-                        <View style={styles.stars}>
-                            {score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                            {score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                            {score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                            {score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                            {score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                            {score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                            {score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                            {score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                            {score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                            {score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                        <View style={styles.totalScore}>
+                            <Text style={styles.score}>{score}</Text>
+                            <View style={styles.stars}>
+                                {score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                {score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                {score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                {score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                {score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                {score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                {score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                {score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                {score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                {score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                            </View>
                         </View>
                         {Firebase.auth().currentUser && (
                             <CardButton
@@ -181,32 +187,34 @@ export function MarkerCard(props) {
             )}
             {reviewListing && (
                 <View>
-                    {reviewList &&
-                        reviewList.map((review, index) => {
-                            const imageToLoad = review.userdata.image ? { uri: review.userdata.image } : require("./../../img/account.png");
-                            return (
-                                <View style={styles.reviewContainer} key={index}>
-                                    <View style={styles.singleReview}>
-                                        <Image source={imageToLoad} style={styles.userImage} />
-                                        <Text style={styles.profileName}>{review.userdata.username}</Text>
-                                        <Text style={styles.score}>{review.score}</Text>
-                                        <View style={styles.starsSingle}>
-                                            {review.score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                            {review.score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                            {review.score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                            {review.score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                            {review.score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                            {review.score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                            {review.score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                            {review.score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                            {review.score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                            {review.score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                    <ScrollView style={styles.reviewsContainer}>
+                        {reviewList &&
+                            reviewList.map((review, index) => {
+                                const imageToLoad = review.userdata.image ? { uri: review.userdata.image } : require("./../../img/account.png");
+                                return (
+                                    <View style={styles.reviewContainer} key={index}>
+                                        <View style={styles.singleReview}>
+                                            <Image source={imageToLoad} style={styles.userImage} />
+                                            <Text style={styles.profileName}>{review.userdata.username}</Text>
+                                            <Text style={styles.score}>{review.score}</Text>
+                                            <View style={styles.starsSingle}>
+                                                {review.score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                                {review.score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                                {review.score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                                {review.score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                                {review.score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                                {review.score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                                {review.score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                                {review.score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                                {review.score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                                {review.score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            </View>
                                         </View>
+                                        <Text style={styles.singleDescription}>{review.review}</Text>
                                     </View>
-                                    <Text style={styles.singleDescription}>{review.review}</Text>
-                                </View>
-                            );
-                        })}
+                                );
+                            })}
+                    </ScrollView>
                     <View style={styles.buttons}>
                         <CardButton
                             func={() => {
@@ -264,15 +272,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     descriptionTitle: {
-        marginTop: 20,
+        marginTop: 5,
         fontSize: 20,
         fontWeight: "bold",
     },
     description: {},
     reviewView: {
         flexDirection: "row",
-
         marginTop: 10,
+        justifyContent: "space-between",
     },
     score: {
         fontSize: 40,
@@ -280,7 +288,7 @@ const styles = StyleSheet.create({
     stars: {
         flexDirection: "row",
         alignSelf: "center",
-        marginLeft: 20,
+        marginLeft: 5,
     },
     star: {
         color: "yellow",
@@ -306,7 +314,6 @@ const styles = StyleSheet.create({
     },
     reviewButton: {
         alignSelf: "center",
-        marginLeft: 80,
         marginTop: 10,
     },
     topView: {
@@ -360,5 +367,11 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginTop: 20,
         padding: 10,
+    },
+    reviewsContainer: {
+        height: "75%",
+    },
+    totalScore: {
+        flexDirection: "row",
     },
 });

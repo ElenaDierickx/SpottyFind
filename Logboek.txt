@@ -122,4 +122,10 @@ Gedaan
     - De mogelijkheid toegevoegd om een marker toe te voegen
     - De mogelijkheid toegevoegd om markers op de kaart te zien
 
+Week 8:
+
+Gedaan
+-------
+    - Review functionaliteit
+
 
