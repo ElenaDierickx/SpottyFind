@@ -218,7 +218,7 @@ export const getMarkersStat = async (uid) => {
   return markers.size;
 };
 
-export const getMarkersList = async (uid) => {
+export const getMarkersList = async (uid, navigation) => {
   var markers = await Firebase.firestore()
     .collection("markers")
     .where("user", "==", uid)
@@ -235,7 +235,13 @@ export const getMarkersList = async (uid) => {
   var i = 0;
   markers.forEach((marker) => {
     markersList.push(
-      <UserButton key={i} img={images[i]}>
+      <UserButton
+        func={() => {
+          navigation.navigate("Map", { startMarker: marker.id });
+        }}
+        key={i}
+        img={images[i]}
+      >
         {marker.data().title}
       </UserButton>
     );

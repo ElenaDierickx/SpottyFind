@@ -23,6 +23,8 @@ export function Map() {
     setMarkers(markers);
   };
 
+  console.log(props.startMarker);
+
   useFocusEffect(
     React.useCallback(() => {
       getLocation();
