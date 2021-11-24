@@ -24,30 +24,10 @@ export const getFollowingList = async (navigation, uid, account) => {
     var images = await Promise.all(promises);
 
     results.map(async (result) => {
-        followingList.push(
-            <UserButton
-                key={i}
-                img={images[i]}
-                func={() => {
-                    if (result.id == Firebase.auth().currentUser.uid) {
-                        navigation.navigate("Account", {
-                            screen: "AccountStack",
-                        });
-                    } else if (account) {
-                        navigation.navigate("People", {
-                            screen: "UserStack",
-                            params: {
-                                uid: result.id,
-                            },
-                        });
-                    } else {
-                        navigation.push("UserStack", { uid: result.id });
-                    }
-                }}
-            >
-                {result.data().username}
-            </UserButton>
-        );
+        let follow = result.data();
+        follow.id = result.id;
+        follow.image = images[i];
+        followingList.push(follow);
         i++;
     });
     return followingList;
@@ -76,28 +56,10 @@ export const getFollowersList = async (navigation, uid, account) => {
     var images = await Promise.all(promises);
 
     users.map((user) => {
-        followerList.push(
-            <UserButton
-                key={i}
-                img={images[i]}
-                func={() => {
-                    if (user.id == Firebase.auth().currentUser.uid) {
-                        navigation.navigate("Account");
-                    } else if (account) {
-                        navigation.navigate("People", {
-                            screen: "UserStack",
-                            params: {
-                                uid: user.id,
-                            },
-                        });
-                    } else {
-                        navigation.push("UserStack", { uid: user.id });
-                    }
-                }}
-            >
-                {user.data().username}
-            </UserButton>
-        );
+        let follower = user.data();
+        follower.id = user.id;
+        follower.image = images[i];
+        followerList.push(follower);
         i++;
     });
 

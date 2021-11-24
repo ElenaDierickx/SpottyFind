@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, Virtualized
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import { getFollowingList, getUserSearch } from "../../utils/Firestore";
+import { UserButton } from "../Components/Button";
 
 export function SearchPeopleScreen({ navigation }) {
     const [searchInput, setSearchInput] = useState("");
@@ -42,7 +43,27 @@ export function SearchPeopleScreen({ navigation }) {
                 />
                 <View>{users}</View>
                 <Text style={styles.followingText}>Following</Text>
-                <View>{following}</View>
+                <View>
+                    {following.map((follow, index) => {
+                        return (
+                            <UserButton
+                                key={index}
+                                img={follow.image}
+                                func={() => {
+                                    if (follow.id == Firebase.auth().currentUser.uid) {
+                                        navigation.navigate("Account", {
+                                            screen: "AccountStack",
+                                        });
+                                    } else {
+                                        navigation.push("UserStack", { uid: follow.id });
+                                    }
+                                }}
+                            >
+                                {follow.username}
+                            </UserButton>
+                        );
+                    })}
+                </View>
             </View>
         </View>
     );
