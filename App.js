@@ -28,6 +28,7 @@ export default function App() {
                     <Tab.Screen
                         name="Map"
                         component={Map}
+                        initialParams={{ initialMarker: "none" }}
                         options={{
                             tabBarIcon: ({ color }) => <Ionicons name="map-outline" color={color} size={22}></Ionicons>,
                             headerShown: false,
@@ -59,6 +60,7 @@ export default function App() {
                     <Tab.Screen
                         name="Map"
                         component={Map}
+                        initialParams={{ initialMarker: "none" }}
                         options={{
                             tabBarIcon: ({ color }) => <Ionicons name="map-outline" color={color} size={22}></Ionicons>,
                             headerShown: false,
