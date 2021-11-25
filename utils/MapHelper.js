@@ -106,7 +106,7 @@ export const getReviewScore = async (markerid) => {
         score += review.data().score;
     });
     score = score / reviews.size;
-    score = Math.round(score / 0.1) * 0.1;
+    score = Math.round(score);
 
     return score;
 };
