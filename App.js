@@ -6,6 +6,7 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 import { LoginStackScreen } from "./Tabs/Logins/LoginStackScreen";
 import { AccountStackScreen } from "./Tabs/User/AccountStackScreen";
 import { PeopleStackScreen } from "./Tabs/People/PeopleStackSreen";
+import { Notifications } from "./Tabs/Notifications";
 import { Map } from "./Tabs/Map";
 import Firebase from "./Config/Firebase";
 import { LogBox } from "react-native";
@@ -31,6 +32,14 @@ export default function App() {
                         initialParams={{ initialMarker: "none" }}
                         options={{
                             tabBarIcon: ({ color }) => <Ionicons name="map-outline" color={color} size={22}></Ionicons>,
+                            headerShown: false,
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Notifications"
+                        component={Notifications}
+                        options={{
+                            tabBarIcon: ({ color }) => <Ionicons name="notifications-outline" color={color} size={22}></Ionicons>,
                             headerShown: false,
                         }}
                     />
