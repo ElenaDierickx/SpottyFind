@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
@@ -26,38 +26,29 @@ Notifications.setNotificationHandler({
 
 export default function App() {
     const [user, setUser] = useState("");
+    const notificationListener = useRef();
+    const responseListener = useRef();
 
     Firebase.auth().onAuthStateChanged((user) => {
         setUser(user);
     });
 
     useEffect(() => {
-        registerPushNotifications();
+        // This listener is fired whenever a notification is received while the app is foregrounded
+        notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+            console.log(notification);
+        });
+
+        // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+        responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+            console.log(response);
+        });
+
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current);
+            Notifications.removeNotificationSubscription(responseListener.current);
+        };
     }, []);
-
-    const registerPushNotifications = async () => {
-        if (Firebase.auth().currentUser.uid) {
-            // const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-            // let finalStatus = status;
-
-            // if (status !== "granted") {
-            //     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-            //     finalStatus = status;
-            // }
-
-            // if (finalStatus !== "granted") {
-            //     return;
-            // }
-
-            // let token = await Notifications.getExpoPushTokenAsync();
-
-            var token = await registerPushNotificationsAsync();
-
-            Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).update({
-                expoPushToken: token,
-            });
-        }
-    };
 
     if (user) {
         return (
