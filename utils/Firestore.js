@@ -4,7 +4,7 @@ import { UserButton } from "../Tabs/Components/Button";
 import { downloadImage } from "./Imaging";
 import { getMarkerImage } from "./MapHelper";
 
-export const getFollowingList = async (navigation, uid, account) => {
+export const getFollowingList = async (uid) => {
     var followingList = [];
     var i = 0;
     var following = await Firebase.firestore().collection("users").doc(uid).collection("following").get();
@@ -33,7 +33,7 @@ export const getFollowingList = async (navigation, uid, account) => {
     return followingList;
 };
 
-export const getFollowersList = async (navigation, uid, account) => {
+export const getFollowersList = async (uid) => {
     var followerList = [];
     var i = 0;
     var promises = [];
@@ -66,7 +66,7 @@ export const getFollowersList = async (navigation, uid, account) => {
     return followerList;
 };
 
-export const getUserSearch = async (searchInput, navigation) => {
+export const getUserSearch = async (searchInput) => {
     if (searchInput) {
         var users = await Firebase.firestore()
             .collection("users")
@@ -84,10 +84,14 @@ export const getUserSearch = async (searchInput, navigation) => {
             var images = await Promise.all(promises);
             users.forEach((user) => {
                 if (user.id != Firebase.auth().currentUser.uid) {
+                    var username = user.data();
+                    username.id = user.id;
+                    username.image = images[i];
                     usernames.push(
-                        <UserButton key={i} img={images[i]} func={() => navigation.navigate("UserStack", { uid: user.id })}>
-                            {user.data().username}
-                        </UserButton>
+                        username
+                        // <UserButton key={i} img={images[i]} func={() => navigation.navigate("UserStack", { uid: user.id })}>
+                        //     {user.data().username}
+                        // </UserButton>
                     );
                 }
                 i++;
@@ -161,7 +165,7 @@ export const getMarkersStat = async (uid) => {
     return markers.size;
 };
 
-export const getMarkersList = async (uid, navigation) => {
+export const getMarkersList = async (uid) => {
     var markers = await Firebase.firestore().collection("markers").where("user", "==", uid).get();
 
     var promises = [];
@@ -182,4 +186,9 @@ export const getMarkersList = async (uid, navigation) => {
     });
 
     return markersList;
+};
+
+export const getReviewAmounts = async (uid) => {
+    reviews = await Firebase.firestore().collectionGroup("reviews").where("user", "==", uid).get();
+    return reviews.size;
 };

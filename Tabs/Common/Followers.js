@@ -10,7 +10,7 @@ export function FollowersScreen({ route, navigation }) {
     const [followers, setFollowers] = useState([]);
 
     const getFollowers = async () => {
-        var followers = await getFollowersList(navigation, uid, account);
+        var followers = await getFollowersList(uid);
         setFollowers(followers);
     };
 

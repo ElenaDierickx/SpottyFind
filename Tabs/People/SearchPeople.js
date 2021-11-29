@@ -12,7 +12,7 @@ export function SearchPeopleScreen({ navigation }) {
     const [following, setFollowing] = useState([]);
 
     const getSearch = async () => {
-        var users = await getUserSearch(searchInput, navigation);
+        var users = await getUserSearch(searchInput);
         setUsers(users);
     };
 
@@ -21,7 +21,7 @@ export function SearchPeopleScreen({ navigation }) {
     }, [searchInput]);
 
     const getFollowing = async () => {
-        var following = await getFollowingList(navigation, Firebase.auth().currentUser.uid);
+        var following = await getFollowingList(Firebase.auth().currentUser.uid);
         setFollowing(following);
     };
 
@@ -41,7 +41,16 @@ export function SearchPeopleScreen({ navigation }) {
                     defaultValue={searchInput}
                     style={styles.input}
                 />
-                <View>{users}</View>
+                <View>
+                    {users &&
+                        users.map((user, index) => {
+                            return (
+                                <UserButton key={index} img={user.image} func={() => navigation.navigate("UserStack", { uid: user.id })}>
+                                    {user.username}
+                                </UserButton>
+                            );
+                        })}
+                </View>
                 <Text style={styles.followingText}>Following</Text>
                 <View>
                     {following.map((follow, index) => {

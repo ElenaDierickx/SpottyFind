@@ -30,8 +30,6 @@ export const createUser = async (email, password, username) => {
             return false;
         }
     } catch (error) {
-        console.log("oopsie");
-        console.log(error.message);
         return error.message;
     }
 };
