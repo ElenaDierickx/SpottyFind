@@ -1,34 +1,43 @@
 {
-  "expo": {
-    "name": "SpottyFind",
-    "slug": "spottyfind",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./img/logo.png",
-    "splash": {
-      "image": "./img/splash.png",
-      "backgroundColor": "#2CCB33",
-      "resizeMode": "contain"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.zeekoe.spottyfind"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "description": ""
-  }
+    "expo": {
+        "plugins": [
+            [
+                "expo-notifications",
+                {
+                    "icon": "./local/assets/notification-icon.png",
+                    "color": "#ffffff",
+                    "sounds": ["./local/assets/notification-sound.wav", "./local/assets/notification-sound-other.wav"],
+                    "mode": "production"
+                }
+            ]
+        ],
+        "name": "SpottyFind",
+        "slug": "spottyfind",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./img/logo.png",
+        "splash": {
+            "image": "./img/splash.png",
+            "backgroundColor": "#2CCB33",
+            "resizeMode": "contain"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#FFFFFF"
+            },
+            "package": "com.zeekoe.spottyfind"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "description": ""
+    }
 }

@@ -87,12 +87,7 @@ export const getUserSearch = async (searchInput) => {
                     var username = user.data();
                     username.id = user.id;
                     username.image = images[i];
-                    usernames.push(
-                        username
-                        // <UserButton key={i} img={images[i]} func={() => navigation.navigate("UserStack", { uid: user.id })}>
-                        //     {user.data().username}
-                        // </UserButton>
-                    );
+                    usernames.push(username);
                 }
                 i++;
             });
