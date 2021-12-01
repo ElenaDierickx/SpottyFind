@@ -3,6 +3,7 @@ import Firebase from "../Config/Firebase";
 import { UserButton } from "../Tabs/Components/Button";
 import { downloadImage } from "./Imaging";
 import { getMarkerImage } from "./MapHelper";
+import { sendFollowNotification } from "./PushNotifications";
 
 export const getFollowingList = async (uid) => {
     var followingList = [];
@@ -145,7 +146,7 @@ export const unfollow = (uid) => {
     });
 };
 
-export const follow = (uid) => {
+export const follow = async (uid) => {
     Firebase.firestore()
         .collection("users")
         .doc(Firebase.auth().currentUser.uid)
@@ -153,6 +154,7 @@ export const follow = (uid) => {
         .add({
             following: Firebase.firestore().collection("users").doc(uid),
         });
+    followNotification(uid);
 };
 
 export const getMarkersStat = async (uid) => {
@@ -186,4 +188,40 @@ export const getMarkersList = async (uid) => {
 export const getReviewAmounts = async (uid) => {
     reviews = await Firebase.firestore().collectionGroup("reviews").where("user", "==", uid).get();
     return reviews.size;
+};
+
+export const followNotification = async (uid) => {
+    Firebase.firestore().collection("users").doc(uid).collection("notifications").add({
+        type: "follow",
+        user: Firebase.auth().currentUser.uid,
+        seen: false,
+        date: Date(),
+    });
+    const sender = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
+    const receiver = await Firebase.firestore().collection("users").doc(uid).get();
+    if (receiver.data().expoPushToken) {
+        sendFollowNotification(sender, receiver);
+    }
+};
+
+export const getNotifications = async (uid) => {
+    const notifications = await Firebase.firestore().collection("users").doc(uid).collection("notifications").get();
+    var notificationsList = [];
+    const imagePromises = [];
+    const userPromises = [];
+    notifications.forEach((notification) => {
+        imagePromises.push(downloadImage(notification.data().user));
+        userPromises.push(getUser(notification.data().user));
+    });
+    var images = await Promise.all(imagePromises);
+    var users = await Promise.all(userPromises);
+    var i = 0;
+    notifications.forEach((notification) => {
+        var notificationObj = notification.data();
+        notificationObj.image = images[i];
+        notificationObj.user = users[i];
+        notificationsList.push(notificationObj);
+        i++;
+    });
+    return notificationsList;
 };

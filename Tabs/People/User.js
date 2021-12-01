@@ -38,7 +38,7 @@ export function UserScreen({ route, navigation }) {
 
         setMarkers(await getMarkersStat(uid));
 
-        setReviews(await getReviewAmounts(user.uid));
+        setReviews(await getReviewAmounts(uid));
     };
 
     useFocusEffect(

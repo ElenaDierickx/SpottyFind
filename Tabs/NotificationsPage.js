@@ -1,11 +1,16 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import Firebase from "./../Config/Firebase";
+import Firebase from "../Config/Firebase";
 import { StyleSheet, View, Text, Image } from "react-native";
+import { getNotifications } from "../utils/Firestore";
 
 export function NotificationsPage() {
-    const onRender = async () => {};
+    const [notifications, setNotifications] = useState([]);
+
+    const onRender = async () => {
+        setNotifications(await getNotifications(Firebase.auth().currentUser.uid));
+    };
 
     useFocusEffect(
         React.useCallback(() => {
@@ -13,25 +18,20 @@ export function NotificationsPage() {
         }, [])
     );
 
-    const imageToLoad = require("./../img/account.png");
-
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
             <Text style={styles.title}>Notifications</Text>
             <View style={styles.notifications}>
-                <View style={styles.notification}>
-                    <Image style={styles.reviewImage} source={imageToLoad} />
-                    <Text style={styles.reviewText}>Zeekoe heeft een review geplaatst op je spot: J - lokaal</Text>
-                </View>
-                <View style={styles.notification}>
-                    <Image style={styles.reviewImage} source={imageToLoad} />
-                    <Text style={styles.reviewText}>Zeebas heeft een review geplaatst op je spot: OOF</Text>
-                </View>
-                <View style={styles.notification}>
-                    <Image style={styles.reviewImage} source={imageToLoad} />
-                    <Text style={styles.reviewText}>Zeester heeft een nieuwe spot geplaatst: BANK</Text>
-                </View>
+                {notifications.map((notification, index) => {
+                    const imageToLoad = notification.image ? { uri: notification.image } : require("./../img/account.png");
+                    return (
+                        <View style={styles.notification} key={index}>
+                            <Image style={styles.reviewImage} source={imageToLoad} />
+                            <Text style={styles.reviewText}>{notification.user.username} volgt je nu.</Text>
+                        </View>
+                    );
+                })}
             </View>
         </View>
     );
