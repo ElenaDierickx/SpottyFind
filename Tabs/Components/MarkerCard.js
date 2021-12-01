@@ -43,7 +43,6 @@ export function MarkerCard(props) {
     const getReviewList = async () => {
         setReviewListing(true);
         const reviews = await getReviews(props.marker.id);
-        console.log(reviews);
         setReviewList(reviews);
     };
 
