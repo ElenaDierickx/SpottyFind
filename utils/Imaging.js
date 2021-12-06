@@ -45,3 +45,12 @@ export const addLocationImage = async () => {
         }
     }
 };
+
+export const getMarkerImage = async (id) => {
+    try {
+        let imageRef = Firebase.storage().ref("images/markers/" + id);
+        return await imageRef.getDownloadURL();
+    } catch (e) {
+        return null;
+    }
+};

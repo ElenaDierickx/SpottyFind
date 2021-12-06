@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
-import { getMarkerImage, postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../../utils/MapHelper";
+import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "../Button";
 import Firebase from "../../../Config/Firebase";
+import { getMarkerImage } from "../../../utils/Imaging";
 
 export function ReviewDetails(props) {
     return (

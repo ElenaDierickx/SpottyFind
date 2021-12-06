@@ -1,9 +1,9 @@
 import React from "react";
+import { createIconSetFromFontello } from "react-native-vector-icons";
 import Firebase from "../Config/Firebase";
 import { UserButton } from "../Tabs/Components/Button";
-import { downloadImage } from "./Imaging";
-import { getMarkerImage } from "./MapHelper";
-import { sendFollowNotification } from "./PushNotifications";
+import { downloadImage, getMarkerImage } from "./Imaging";
+import { sendFollowNotification, sendReviewNotification } from "./PushNotifications";
 
 export const getFollowingList = async (uid) => {
     var followingList = [];
@@ -130,7 +130,9 @@ export const getFollowingStat = async (uid) => {
 
 export const getUser = async (uid) => {
     var user = await Firebase.firestore().collection("users").doc(uid).get();
-    return user.data();
+    var userObj = user.data();
+    userObj.id = user.id;
+    return userObj;
 };
 
 export const unfollow = (uid) => {
@@ -204,24 +206,63 @@ export const followNotification = async (uid) => {
     }
 };
 
+export const reviewNotification = async (markerid) => {
+    var marker = await Firebase.firestore().collection("markers").doc(markerid).get();
+    Firebase.firestore().collection("users").doc(marker.data().user).collection("notifications").add({
+        type: "review",
+        user: Firebase.auth().currentUser.uid,
+        marker: markerid,
+        seen: false,
+        date: Date(),
+    });
+    const sender = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
+    const receiver = await Firebase.firestore().collection("users").doc(marker.data().user).get();
+    if (receiver.data().expoPushToken) {
+        sendReviewNotification(sender, receiver, marker.data().title);
+    }
+};
+
 export const getNotifications = async (uid) => {
     const notifications = await Firebase.firestore().collection("users").doc(uid).collection("notifications").get();
     var notificationsList = [];
     const imagePromises = [];
     const userPromises = [];
+    const markerPromises = [];
     notifications.forEach((notification) => {
-        imagePromises.push(downloadImage(notification.data().user));
         userPromises.push(getUser(notification.data().user));
+        if (notification.data().type == "follow") {
+            imagePromises.push(downloadImage(notification.data().user));
+        }
+        if (notification.data().type == "review") {
+            imagePromises.push(getMarkerImage(notification.data().marker));
+            markerPromises.push(getMarker(notification.data().marker));
+        }
     });
     var images = await Promise.all(imagePromises);
     var users = await Promise.all(userPromises);
+    var markers = await Promise.all(markerPromises);
     var i = 0;
+    var j = 0;
     notifications.forEach((notification) => {
         var notificationObj = notification.data();
         notificationObj.image = images[i];
         notificationObj.user = users[i];
+        if (notificationObj.type == "review") {
+            notificationObj.marker = markers[j];
+            j++;
+        }
         notificationsList.push(notificationObj);
         i++;
     });
+    notificationsList.sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+    });
     return notificationsList;
+};
+
+export const getMarker = async (markerid) => {
+    const marker = await Firebase.firestore().collection("markers").doc(markerid).get();
+    var markerObj = marker.data();
+    markerObj.id = marker.id;
+    return markerObj;
 };

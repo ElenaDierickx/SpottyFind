@@ -2,10 +2,10 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import Firebase from "../Config/Firebase";
-import { StyleSheet, View, Text, Image } from "react-native";
-import { getNotifications } from "../utils/Firestore";
+import { StyleSheet, View, Text, Image, Pressable } from "react-native";
+import { getMarker, getNotifications, reviewNotification } from "../utils/Firestore";
 
-export function NotificationsPage() {
+export function NotificationsPage({ navigation }) {
     const [notifications, setNotifications] = useState([]);
 
     const onRender = async () => {
@@ -25,12 +25,43 @@ export function NotificationsPage() {
             <View style={styles.notifications}>
                 {notifications.map((notification, index) => {
                     const imageToLoad = notification.image ? { uri: notification.image } : require("./../img/account.png");
-                    return (
-                        <View style={styles.notification} key={index}>
-                            <Image style={styles.reviewImage} source={imageToLoad} />
-                            <Text style={styles.reviewText}>{notification.user.username} volgt je nu.</Text>
-                        </View>
-                    );
+                    if (notification.type == "follow") {
+                        return (
+                            <Pressable
+                                onPress={() => {
+                                    navigation.navigate("People", {
+                                        screen: "UserStack",
+                                        params: {
+                                            uid: notification.user.id,
+                                        },
+                                    });
+                                }}
+                                style={styles.notification}
+                                key={index}
+                            >
+                                <Image style={styles.reviewImage} source={imageToLoad} />
+                                <Text style={styles.reviewText}>{notification.user.username} is now following you.</Text>
+                            </Pressable>
+                        );
+                    }
+                    if (notification.type == "review") {
+                        return (
+                            <Pressable
+                                onPress={() => {
+                                    navigation.navigate("Map", {
+                                        initialMarker: notification.marker,
+                                    });
+                                }}
+                                style={styles.notification}
+                                key={index}
+                            >
+                                <Image style={styles.reviewImage} source={imageToLoad} />
+                                <Text style={styles.reviewText}>
+                                    {notification.user.username} placed a review on marker {notification.marker.title}.
+                                </Text>
+                            </Pressable>
+                        );
+                    }
                 })}
             </View>
         </View>

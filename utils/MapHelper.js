@@ -5,6 +5,8 @@ import { Marker } from "react-native-maps";
 import { Touchable } from "react-native";
 import { Pressable } from "react-native";
 import { downloadImage } from "./Imaging";
+import { reviewNotification } from "./Firestore";
+import { getMarkerImage } from "./Imaging";
 
 export const addMarker = async (title, image, description) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -51,21 +53,13 @@ export const getMarkers = async () => {
     return markersList;
 };
 
-export const getMarkerImage = async (id) => {
-    try {
-        let imageRef = Firebase.storage().ref("images/markers/" + id);
-        return await imageRef.getDownloadURL();
-    } catch (e) {
-        return null;
-    }
-};
-
 export const postReview = async (markerid, stars, review) => {
     Firebase.firestore().collection("markers").doc(markerid).collection("reviews").add({
         user: Firebase.auth().currentUser.uid,
         score: stars,
         review: review,
     });
+    reviewNotification(markerid);
 };
 
 export const updateReview = async (markerid, reviewid, stars, review) => {

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
-import { getMarkerImage, postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../utils/MapHelper";
+import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "./Button";
 import Firebase from "../../Config/Firebase";
 import { ReviewDetails } from "./MarkerCard/ReviewDetails";
 import { ReviewList } from "./MarkerCard/ReviewList";
 import { ReviewPlace } from "./MarkerCard/ReviewPlace";
+import { getMarkerImage } from "../../utils/Imaging";
 
 export function MarkerCard(props) {
     const [image, setImage] = useState(null);
