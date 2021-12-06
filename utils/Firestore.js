@@ -245,6 +245,7 @@ export const getNotifications = async (uid) => {
     var j = 0;
     notifications.forEach((notification) => {
         var notificationObj = notification.data();
+        notificationObj.id = notification.id;
         notificationObj.image = images[i];
         notificationObj.user = users[i];
         if (notificationObj.type == "review") {
@@ -260,9 +261,30 @@ export const getNotifications = async (uid) => {
     return notificationsList;
 };
 
+export const unseenNotifications = async () => {
+    const notifications = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).collection("notifications").get();
+    var unseen = 0;
+    notifications.forEach((notification) => {
+        if (!notification.data().seen) {
+            unseen++;
+        }
+    });
+    return unseen;
+};
+
 export const getMarker = async (markerid) => {
     const marker = await Firebase.firestore().collection("markers").doc(markerid).get();
     var markerObj = marker.data();
     markerObj.id = marker.id;
     return markerObj;
+};
+
+export const setSeen = async (notifications) => {
+    notifications.forEach((notification) => {
+        if (!notification.seen) {
+            Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).collection("notifications").doc(notification.id).update({
+                seen: true,
+            });
+        }
+    });
 };

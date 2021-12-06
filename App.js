@@ -11,6 +11,8 @@ import { Map } from "./Tabs/Map";
 import Firebase from "./Config/Firebase";
 import { LogBox } from "react-native";
 import * as Notifications from "expo-notifications";
+import { unseenNotifications } from "./utils/Firestore";
+import { logOut } from "./utils/Authorisation";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 
@@ -28,27 +30,40 @@ export default function App() {
     const [user, setUser] = useState("");
     const notificationListener = useRef();
     const responseListener = useRef();
+    const [notifications, setNotifications] = useState(null);
+
+    const getUnseenNotifications = async () => {
+        const notifications = await unseenNotifications();
+        if (notifications == 0) {
+            setNotifications(null);
+        } else {
+            setNotifications(notifications);
+        }
+    };
 
     Firebase.auth().onAuthStateChanged((user) => {
         setUser(user);
     });
 
     useEffect(() => {
-        // This listener is fired whenever a notification is received while the app is foregrounded
-        notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
-            console.log(notification);
-        });
+        if (user) {
+            getUnseenNotifications();
+            // This listener is fired whenever a notification is received while the app is foregrounded
+            notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+                console.log(notification);
+            });
 
-        // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-        responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-            console.log(response);
-        });
+            // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+            responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+                console.log(response);
+            });
 
-        return () => {
-            Notifications.removeNotificationSubscription(notificationListener.current);
-            Notifications.removeNotificationSubscription(responseListener.current);
-        };
-    }, []);
+            return () => {
+                Notifications.removeNotificationSubscription(notificationListener.current);
+                Notifications.removeNotificationSubscription(responseListener.current);
+            };
+        }
+    }, [user]);
 
     if (user) {
         return (
@@ -69,6 +84,12 @@ export default function App() {
                         options={{
                             tabBarIcon: ({ color }) => <Ionicons name="notifications-outline" color={color} size={22}></Ionicons>,
                             headerShown: false,
+                            tabBarBadge: notifications,
+                        }}
+                        listeners={{
+                            tabPress: (e) => {
+                                setNotifications(null);
+                            },
                         }}
                     />
                     <Tab.Screen
