@@ -237,7 +237,6 @@ export const spotNotification = async (markerid) => {
     const users = await Promise.all(promises);
     const sender = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
     users.forEach((user) => {
-        console.log(user.id);
         Firebase.firestore().collection("users").doc(user.id).collection("notifications").add({
             type: "marker",
             user: Firebase.auth().currentUser.uid,

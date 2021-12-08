@@ -21,13 +21,24 @@ export function Map({ route }) {
     const { initialMarker } = route.params;
     const [errorMessage, setErrorMessage] = useState(null);
 
-    const mapToLocation = (location) => {
-        let r = {
-            latitude: location.coords.latitude - 0.0035,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-        };
+    const mapToLocation = (location, offset) => {
+        var r;
+        if (offset) {
+            r = {
+                latitude: location.coords.latitude - 0.0035,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            };
+        } else {
+            r = {
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            };
+        }
+
         map.current.animateToRegion(r, 1000);
     };
 
@@ -45,7 +56,7 @@ export function Map({ route }) {
 
     useEffect(() => {
         if (initialMarker != "none" && map) {
-            mapToLocation(initialMarker.location);
+            mapToLocation(initialMarker.location, false);
             setMarkerCard(initialMarker);
         }
     }, [initialMarker]);
@@ -128,7 +139,7 @@ export function Map({ route }) {
                                 }}
                                 onPress={() => {
                                     if (disabledMap) {
-                                        mapToLocation(marker.location);
+                                        mapToLocation(marker.location, true);
                                         setMarkerCard(marker);
                                     }
                                 }}
@@ -141,7 +152,7 @@ export function Map({ route }) {
                 onPress={async () => {
                     const location = await getLocation();
                     if (location) {
-                        mapToLocation(location);
+                        mapToLocation(location, false);
                     }
                 }}
             />
@@ -152,7 +163,7 @@ export function Map({ route }) {
                         if (location) {
                             setaddLocationOn(true);
                             setDisabledMap(false);
-                            mapToLocation(location);
+                            mapToLocation(location, true);
                         }
                     }}
                 />
