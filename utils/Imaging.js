@@ -1,13 +1,23 @@
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import Firebase from "../Config/Firebase";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+
+const compressImage = async (uri, format = SaveFormat.JPEG) => {
+    // SaveFormat.PNG
+    const result = await manipulateAsync(uri, [{ resize: { width: 1200 } }], { compress: 0.7, format });
+
+    return { name: `${Date.now()}.${format}`, type: `image/${format}`, ...result };
+    // return: { name, type, width, height, uri }
+};
 
 export const uploadImage = async () => {
     let result = await ImagePicker.launchCameraAsync();
+    let compressed = await compressImage(result.uri);
 
     if (!result.cancelled) {
         try {
-            await upload(result.uri);
+            await upload(compressed.uri);
             return true;
         } catch (e) {
             return false;
@@ -36,10 +46,11 @@ export const downloadImage = async (uid) => {
 
 export const addLocationImage = async () => {
     let result = await ImagePicker.launchCameraAsync();
+    let compressed = await compressImage(result.uri);
 
     if (!result.cancelled) {
         try {
-            return result;
+            return compressed;
         } catch (e) {
             return e;
         }
