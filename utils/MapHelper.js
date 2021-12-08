@@ -1,12 +1,8 @@
 import React from "react";
 import Firebase from "../Config/Firebase";
 import * as Location from "expo-location";
-import { Marker } from "react-native-maps";
-import { Touchable } from "react-native";
-import { Pressable } from "react-native";
 import { downloadImage } from "./Imaging";
-import { reviewNotification } from "./Firestore";
-import { getMarkerImage } from "./Imaging";
+import { reviewNotification, spotNotification } from "./Firestore";
 
 export const addMarker = async (title, image, description) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -24,6 +20,7 @@ export const addMarker = async (title, image, description) => {
         });
 
         uploadImage(image.uri, marker.id);
+        spotNotification(marker.id);
 
         return "succes";
     } else {

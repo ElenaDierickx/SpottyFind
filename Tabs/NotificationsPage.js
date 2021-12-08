@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import Firebase from "../Config/Firebase";
-import { StyleSheet, View, Text, Image, Pressable } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, ScrollView } from "react-native";
 import { getMarker, getNotifications, reviewNotification, setSeen } from "../utils/Firestore";
 
 export function NotificationsPage({ navigation }) {
@@ -24,7 +24,7 @@ export function NotificationsPage({ navigation }) {
         <View style={styles.container}>
             <StatusBar style="auto" />
             <Text style={styles.title}>Notifications</Text>
-            <View style={styles.notifications}>
+            <ScrollView style={styles.notifications}>
                 {notifications.map((notification, index) => {
                     const imageToLoad = notification.image ? { uri: notification.image } : require("./../img/account.png");
                     if (notification.type == "follow") {
@@ -64,8 +64,26 @@ export function NotificationsPage({ navigation }) {
                             </Pressable>
                         );
                     }
+                    if (notification.type == "marker") {
+                        return (
+                            <Pressable
+                                onPress={() => {
+                                    navigation.navigate("Map", {
+                                        initialMarker: notification.marker,
+                                    });
+                                }}
+                                style={[styles.notification, !notification.seen && styles.unseen]}
+                                key={index}
+                            >
+                                <Image style={styles.reviewImage} source={imageToLoad} />
+                                <Text style={styles.reviewText}>
+                                    {notification.user.username} placed a new marker: {notification.marker.title}.
+                                </Text>
+                            </Pressable>
+                        );
+                    }
                 })}
-            </View>
+            </ScrollView>
         </View>
     );
 }
@@ -74,7 +92,7 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "#fff", justifyContent: "flex-start" },
     title: { marginTop: 50, marginLeft: 20, fontSize: 24, fontWeight: "bold" },
     notifications: { marginTop: 10 },
-    notification: { flexDirection: "row", alignContent: "center", marginTop: 20, paddingTop: 5, paddingBottom: 5 },
+    notification: { flexDirection: "row", alignContent: "center", marginTop: 20, paddingTop: 2, paddingBottom: 2 },
     unseen: { backgroundColor: "grey" },
     reviewImage: { width: 60, height: 60, marginLeft: 10, borderRadius: 100 },
     reviewText: { alignSelf: "center", width: 250, marginLeft: 15 },

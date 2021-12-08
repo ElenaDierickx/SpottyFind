@@ -3,7 +3,7 @@ import { createIconSetFromFontello } from "react-native-vector-icons";
 import Firebase from "../Config/Firebase";
 import { UserButton } from "../Tabs/Components/Button";
 import { downloadImage, getMarkerImage } from "./Imaging";
-import { sendFollowNotification, sendReviewNotification } from "./PushNotifications";
+import { sendFollowNotification, sendReviewNotification, sendMarkerNotification } from "./PushNotifications";
 
 export const getFollowingList = async (uid) => {
     var followingList = [];
@@ -222,6 +222,35 @@ export const reviewNotification = async (markerid) => {
     }
 };
 
+export const spotNotification = async (markerid) => {
+    var marker = await Firebase.firestore().collection("markers").doc(markerid).get();
+    const promises = [];
+    var followers = await Firebase.firestore()
+        .collectionGroup("following")
+        .where("following", "==", Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid))
+        .get();
+
+    followers.forEach((follower) => {
+        const promise = follower.ref.parent.parent.get();
+        promises.push(promise);
+    });
+    const users = await Promise.all(promises);
+    const sender = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
+    users.forEach((user) => {
+        console.log(user.id);
+        Firebase.firestore().collection("users").doc(user.id).collection("notifications").add({
+            type: "marker",
+            user: Firebase.auth().currentUser.uid,
+            marker: markerid,
+            seen: false,
+            date: Date(),
+        });
+        if (user.data().expoPushToken) {
+            sendMarkerNotification(sender, user, marker.data().title);
+        }
+    });
+};
+
 export const getNotifications = async (uid) => {
     const notifications = await Firebase.firestore().collection("users").doc(uid).collection("notifications").get();
     var notificationsList = [];
@@ -233,7 +262,7 @@ export const getNotifications = async (uid) => {
         if (notification.data().type == "follow") {
             imagePromises.push(downloadImage(notification.data().user));
         }
-        if (notification.data().type == "review") {
+        if (notification.data().type == "review" || notification.data().type == "marker") {
             imagePromises.push(getMarkerImage(notification.data().marker));
             markerPromises.push(getMarker(notification.data().marker));
         }
@@ -248,7 +277,7 @@ export const getNotifications = async (uid) => {
         notificationObj.id = notification.id;
         notificationObj.image = images[i];
         notificationObj.user = users[i];
-        if (notificationObj.type == "review") {
+        if (notificationObj.type == "review" || notification.data().type == "marker") {
             notificationObj.marker = markers[j];
             j++;
         }

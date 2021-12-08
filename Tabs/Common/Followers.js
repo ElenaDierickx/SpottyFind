@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { getFollowersList } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
 import Firebase from "../../Config/Firebase";
@@ -23,7 +23,7 @@ export function FollowersScreen({ route, navigation }) {
             <StatusBar style="auto" />
             <View>
                 <Text style={styles.followingText}>Followers</Text>
-                <View>
+                <ScrollView>
                     {followers.map((follower, index) => {
                         return (
                             <UserButton
@@ -48,7 +48,7 @@ export function FollowersScreen({ route, navigation }) {
                             </UserButton>
                         );
                     })}
-                </View>
+                </ScrollView>
             </View>
         </View>
     );

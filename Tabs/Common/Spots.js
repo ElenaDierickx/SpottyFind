@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { getMarkersList } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
 
@@ -22,7 +22,7 @@ export function SpotsScreen({ route, navigation }) {
             <StatusBar style="auto" />
             <View>
                 <Text style={styles.followingText}>Spots</Text>
-                <View>
+                <ScrollView>
                     {markers.map((marker, index) => {
                         return (
                             <UserButton
@@ -38,7 +38,7 @@ export function SpotsScreen({ route, navigation }) {
                             </UserButton>
                         );
                     })}
-                </View>
+                </ScrollView>
             </View>
         </View>
     );
