@@ -78,7 +78,10 @@ export function MarkerCard(props) {
     return (
         <View style={styles.markerCard}>
             <View style={styles.topView}>
-                <Text style={styles.title}>{props.marker.title}</Text>
+                <View>
+                    <Text style={styles.title}>{props.marker.title}</Text>
+                    <Text style={styles.author}>Author: {props.marker.user.username}</Text>
+                </View>
                 <Pressable onPress={props.close} style={styles.closeView}>
                     <Ionicons style={styles.close} name="close"></Ionicons>
                 </Pressable>
@@ -136,7 +139,7 @@ export function MarkerCard(props) {
 
 const styles = StyleSheet.create({
     markerCard: {
-        height: 460,
+        height: 470,
         width: "95%",
         backgroundColor: "#FFFFFF",
         position: "absolute",
@@ -159,5 +162,9 @@ const styles = StyleSheet.create({
     closeView: {
         alignSelf: "center",
         marginRight: 10,
+    },
+    author: {
+        fontSize: 12,
+        fontWeight: "bold",
     },
 });

@@ -2,7 +2,7 @@ import React from "react";
 import Firebase from "../Config/Firebase";
 import * as Location from "expo-location";
 import { downloadImage } from "./Imaging";
-import { reviewNotification, spotNotification } from "./Firestore";
+import { getUser, reviewNotification, spotNotification } from "./Firestore";
 
 export const addMarker = async (title, image, description) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -54,6 +54,7 @@ export const getMarkers = async (filter) => {
             const promise = Firebase.firestore().collection("markers").where("user", "==", user.id).get();
             markerPromises.push(promise);
         });
+
         var markerlists = await Promise.all(markerPromises);
         var markers = [];
         markerlists.map((markerlist) => {
@@ -63,12 +64,22 @@ export const getMarkers = async (filter) => {
         });
     }
 
+    const userPromises = [];
+    markers.forEach((marker) => {
+        const promise = getUser(marker.data().user);
+        userPromises.push(promise);
+    });
+    const userlist = await Promise.all(userPromises);
+
+    var i = 0;
     var markersList = [];
     if (markers) {
         markers.forEach((marker) => {
             markerWID = marker.data();
             markerWID.id = marker.id;
+            markerWID.user = userlist[i];
             markersList.push(markerWID);
+            i++;
         });
     }
 

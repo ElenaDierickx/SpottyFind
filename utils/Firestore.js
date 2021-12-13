@@ -24,7 +24,7 @@ export const getFollowingList = async (uid) => {
     });
     var images = await Promise.all(promises);
 
-    results.map(async (result) => {
+    results.map((result) => {
         let follow = result.data();
         follow.id = result.id;
         follow.image = images[i];
@@ -167,12 +167,16 @@ export const getMarkersStat = async (uid) => {
 export const getMarkersList = async (uid) => {
     var markers = await Firebase.firestore().collection("markers").where("user", "==", uid).get();
 
-    var promises = [];
+    const promises = [];
+    const userPromises = [];
     markers.forEach((marker) => {
         const promise = getMarkerImage(marker.id);
+        const userPromise = getUser(marker.data().user);
         promises.push(promise);
+        userPromises.push(userPromise);
     });
-    var images = await Promise.all(promises);
+    const images = await Promise.all(promises);
+    const users = await Promise.all(userPromises);
 
     var markersList = [];
     var i = 0;
@@ -180,6 +184,7 @@ export const getMarkersList = async (uid) => {
         markerWID = marker.data();
         markerWID.id = marker.id;
         markerWID.image = images[i];
+        markerWID.user = users[i];
         markersList.push(markerWID);
         i++;
     });

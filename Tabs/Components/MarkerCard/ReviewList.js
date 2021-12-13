@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     reviewsContainer: {
-        height: "75%",
+        height: "71%",
     },
 });
