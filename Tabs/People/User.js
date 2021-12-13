@@ -41,15 +41,10 @@ export function UserScreen({ route, navigation }) {
         setReviews(await getReviewAmounts(uid));
     };
 
-    useFocusEffect(
-        React.useCallback(() => {
-            onRender();
-        }, [])
-    );
-
     useEffect(() => {
+        onRender();
         GetImage();
-    }, []);
+    }, [uid]);
 
     const GetImage = async () => {
         try {

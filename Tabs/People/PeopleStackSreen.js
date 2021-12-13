@@ -17,6 +17,7 @@ export function PeopleStackScreen() {
                 options={{
                     headerShown: false,
                 }}
+                initialParams={{ toUser: "none" }}
             />
             <PeopleStack.Screen
                 name="UserStack"

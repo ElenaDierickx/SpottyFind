@@ -12,7 +12,6 @@ import Firebase from "./Config/Firebase";
 import { LogBox } from "react-native";
 import * as Notifications from "expo-notifications";
 import { unseenNotifications } from "./utils/Firestore";
-import { logOut } from "./utils/Authorisation";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 
