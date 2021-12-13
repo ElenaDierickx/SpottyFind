@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, ProgressBarAndroidComponent } from "react-native";
 import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "./Button";
@@ -116,6 +116,7 @@ export function MarkerCard(props) {
                 <ReviewList
                     reviewList={reviewList}
                     hasReviewed={hasReviewed}
+                    user={props.marker.user}
                     back={() => {
                         setReviewListing(false);
                     }}

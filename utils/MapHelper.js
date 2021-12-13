@@ -40,10 +40,8 @@ const uploadImage = async (uri, id) => {
 
 export const getMarkers = async (filter) => {
     if (filter == "all") {
-        console.log("oof");
         var markers = await Firebase.firestore().collection("markers").get();
     } else if (filter == "following") {
-        console.log("oofger");
         var following = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).collection("following").get();
         const promises = [];
         following.forEach((following) => {
