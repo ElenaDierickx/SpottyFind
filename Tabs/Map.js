@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useRef, useState, useEffect } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
-import { StyleSheet, View, Dimensions, Alert, Text } from "react-native";
+import { StyleSheet, View, Dimensions, Alert, Text, Picker } from "react-native";
 import { LocationButton, AddLocationButton } from "./Components/Button";
 import { AddLocationCard } from "./Components/AddLocationCard";
 import { getMarkers } from "../utils/MapHelper";
@@ -20,6 +20,7 @@ export function Map({ route }) {
     const [disabledMap, setDisabledMap] = useState(true);
     const { initialMarker } = route.params;
     const [errorMessage, setErrorMessage] = useState(null);
+    const [selectedFilter, setSelectedFilter] = useState("all");
 
     const mapToLocation = (location, offset) => {
         var r;
@@ -42,8 +43,12 @@ export function Map({ route }) {
         map.current.animateToRegion(r, 1000);
     };
 
-    const gettingMarkers = async () => {
-        var markers = await getMarkers();
+    const gettingMarkers = async (filter) => {
+        if (filter) {
+            var markers = await getMarkers(filter);
+        } else {
+            var markers = await getMarkers(selectedFilter);
+        }
         setMarkers(markers);
     };
 
@@ -56,7 +61,7 @@ export function Map({ route }) {
 
     useEffect(() => {
         if (initialMarker != "none" && map) {
-            mapToLocation(initialMarker.location, false);
+            mapToLocation(initialMarker.location, true);
             setMarkerCard(initialMarker);
         }
     }, [initialMarker]);
@@ -68,13 +73,13 @@ export function Map({ route }) {
             setErrorMessage("Permission to access location was denied");
             setTimeout(() => {
                 setErrorMessage(null);
-            }, 5000);
+            }, 3000);
             return null;
         } else if (!isOn) {
             setErrorMessage("Please turn on your location");
             setTimeout(() => {
                 setErrorMessage(null);
-            }, 5000);
+            }, 3000);
             return null;
         } else {
             setErrorMessage(null);
@@ -148,6 +153,21 @@ export function Map({ route }) {
                     })}
             </MapView>
 
+            <View style={styles.filterContainer}>
+                <Picker
+                    selectedValue={selectedFilter}
+                    style={styles.filter}
+                    itemStyle={styles.filteritem}
+                    onValueChange={(itemValue, itemIndex) => {
+                        setSelectedFilter(itemValue);
+                        gettingMarkers(itemValue);
+                    }}
+                >
+                    <Picker.Item label="All" value="all" />
+                    <Picker.Item label="Following" value="following" />
+                </Picker>
+            </View>
+
             <LocationButton
                 onPress={async () => {
                     const location = await getLocation();
@@ -217,5 +237,22 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         alignContent: "center",
+    },
+    filter: {
+        color: "#FFFFFF",
+        width: 140,
+        height: 30,
+    },
+    filteritem: {
+        fontWeight: "bold",
+    },
+    filterContainer: {
+        backgroundColor: "#2CCB33",
+        width: 140,
+        height: 30,
+        top: 45,
+        left: 20,
+        position: "absolute",
+        borderRadius: 20,
     },
 });
