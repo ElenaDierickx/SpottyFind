@@ -64,12 +64,16 @@ export const getMarkers = async (filter) => {
         });
     }
 
+    const userImagePromises = [];
     const userPromises = [];
     markers.forEach((marker) => {
+        const userImage = downloadImage(marker.data().user);
         const promise = getUser(marker.data().user);
         userPromises.push(promise);
+        userImagePromises.push(userImage);
     });
     const userlist = await Promise.all(userPromises);
+    const userImages = await Promise.all(userImagePromises);
 
     var i = 0;
     var markersList = [];
@@ -78,6 +82,7 @@ export const getMarkers = async (filter) => {
             markerWID = marker.data();
             markerWID.id = marker.id;
             markerWID.user = userlist[i];
+            markerWID.user.img = userImages[i];
             markersList.push(markerWID);
             i++;
         });
@@ -151,4 +156,11 @@ export const hasReview = async (markerid) => {
         ownReview.id = review.id;
     });
     return ownReview;
+};
+
+export const updateMarker = async (markerId, title, description) => {
+    Firebase.firestore().collection("markers").doc(markerId).update({
+        title: title,
+        description: description,
+    });
 };

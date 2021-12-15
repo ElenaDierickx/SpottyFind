@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
 import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
-import { CardButton } from "../Button";
+import { CardButton, UserButton } from "../Button";
 import Firebase from "../../../Config/Firebase";
 import { getMarkerImage } from "../../../utils/Imaging";
 
 export function ReviewDetails(props) {
+    const imageToLoad = props.marker.user.img ? { uri: props.marker.user.img } : require("./../../../img/account.png");
     return (
         <View>
             <Image style={styles.image} source={props.imageToLoad} />
@@ -32,8 +33,44 @@ export function ReviewDetails(props) {
                     </CardButton>
                 )}
             </View>
-            <Text style={styles.descriptionTitle}>Description</Text>
-            <Text style={styles.description}>{props.marker.description}</Text>
+            <View style={styles.details}>
+                <View>
+                    <Text style={styles.creatorTitle}>Creator</Text>
+                    <Pressable
+                        style={styles.details}
+                        onPress={() => {
+                            if (props.marker.user.id == Firebase.auth().currentUser.uid) {
+                                props.navigation.navigate("Account", {
+                                    screen: "AccountStack",
+                                });
+                            } else {
+                                props.navigation.navigate("People", {
+                                    screen: "UserStack",
+                                    params: {
+                                        uid: props.marker.user.id,
+                                    },
+                                });
+                            }
+                        }}
+                    >
+                        <View style={styles.user}>
+                            <View style={styles.userDetails}>
+                                <Image source={imageToLoad} style={styles.userimage} />
+                                <Text>{props.marker.user.username}</Text>
+                            </View>
+                            {Firebase.auth().currentUser.uid == props.marker.user.id && (
+                                <CardButton style={styles.reviewButton} func={props.editMarker}>
+                                    Edit Marker
+                                </CardButton>
+                            )}
+                        </View>
+                    </Pressable>
+                </View>
+                <View>
+                    <Text style={styles.descriptionTitle}>Description</Text>
+                    <Text style={styles.description}>{props.marker.description}</Text>
+                </View>
+            </View>
         </View>
     );
 }
@@ -46,7 +83,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     descriptionTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
         marginTop: 5,
+    },
+    creatorTitle: {
         fontSize: 20,
         fontWeight: "bold",
     },
@@ -73,5 +114,23 @@ const styles = StyleSheet.create({
     },
     totalScore: {
         flexDirection: "row",
+    },
+    userimage: {
+        width: 50,
+        height: 50,
+        borderRadius: 100,
+        marginRight: 10,
+    },
+    user: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    userDetails: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    details: {
+        marginTop: 5,
     },
 });

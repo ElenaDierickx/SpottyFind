@@ -12,7 +12,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const map = React.createRef();
 
-export function Map({ route }) {
+export function Map({ route, navigation }) {
     const [location, setLocation] = useState(null);
     const [addLocationOn, setaddLocationOn] = useState(false);
     const [markers, setMarkers] = useState(null);
@@ -204,6 +204,7 @@ export function Map({ route }) {
                     close={() => {
                         setMarkerCard(null);
                     }}
+                    navigation={navigation}
                 />
             )}
 

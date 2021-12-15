@@ -39,8 +39,8 @@ export function ReviewList(props) {
             </ScrollView>
             <View style={styles.buttons}>
                 <CardButton func={props.back}>Back</CardButton>
-                {!(props.user == Firebase.auth().currentUser.uid) && props.hasReviewed && <CardButton func={props.edit}>Edit</CardButton>}
-                {!(props.user == Firebase.auth().currentUser.uid) && !props.hasReviewed && <CardButton func={props.place}>Place</CardButton>}
+                {!(props.user.id == Firebase.auth().currentUser.uid) && props.hasReviewed && <CardButton func={props.edit}>Edit</CardButton>}
+                {!(props.user.id == Firebase.auth().currentUser.uid) && !props.hasReviewed && <CardButton func={props.place}>Place</CardButton>}
             </View>
         </View>
     );
@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     reviewsContainer: {
-        height: "71%",
+        height: 400.5,
     },
 });

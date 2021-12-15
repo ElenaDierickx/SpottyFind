@@ -8,6 +8,10 @@ import Firebase from "../../../Config/Firebase";
 export function ReviewPlace(props) {
     return (
         <View>
+            <Text style={styles.subtitle}>
+                {props.hasReviewed && "Edit"}
+                {!props.hasReviewed && "Place"} Review
+            </Text>
             <View style={styles.starsReview}>
                 {props.stars >= 1 && (
                     <Pressable onPress={() => props.setStars(1)}>
@@ -66,7 +70,7 @@ export function ReviewPlace(props) {
                 defaultValue={props.reviewText}
                 style={styles.input}
                 multiline={true}
-                maxLength={255}
+                maxLength={120}
             />
             <View style={styles.buttons}>
                 <CardButton func={props.back}>Back</CardButton>
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     },
     buttons: {
         flexDirection: "row",
-        marginTop: 20,
+        marginTop: 90,
         justifyContent: "space-between",
     },
     input: {
@@ -115,5 +119,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
         textAlignVertical: "top",
         paddingTop: 5,
+    },
+    subtitle: {
+        fontSize: 20,
+        fontWeight: "bold",
     },
 });

@@ -53,7 +53,7 @@ export function AddLocationCard(props) {
                 defaultValue={description}
                 style={styles.description}
                 multiline={true}
-                maxLength={255}
+                maxLength={120}
             />
             <Text>{errorText}</Text>
             <View style={styles.buttons}>

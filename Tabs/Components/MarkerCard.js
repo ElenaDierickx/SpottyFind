@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, ProgressBarAndroidComponent } from "react-native";
-import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../utils/MapHelper";
+import { postReview, getReviews, getReviewScore, hasReview, updateReview, updateMarker } from "../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "./Button";
 import Firebase from "../../Config/Firebase";
 import { ReviewDetails } from "./MarkerCard/ReviewDetails";
 import { ReviewList } from "./MarkerCard/ReviewList";
 import { ReviewPlace } from "./MarkerCard/ReviewPlace";
+import { EditMarker } from "./MarkerCard/EditMarker";
 import { getMarkerImage } from "../../utils/Imaging";
 
 export function MarkerCard(props) {
@@ -18,6 +19,9 @@ export function MarkerCard(props) {
     const [reviewList, setReviewList] = useState(null);
     const [score, setScore] = useState(null);
     const [hasReviewed, setHasReviewed] = useState(null);
+    const [editMarker, setEditMarker] = useState(null);
+    const [title, setTitle] = useState(props.marker.title);
+    const [description, setDescription] = useState(props.marker.description);
 
     const imageToLoad = image ? { uri: image } : require("./../../img/account.png");
 
@@ -80,20 +84,23 @@ export function MarkerCard(props) {
             <View style={styles.topView}>
                 <View>
                     <Text style={styles.title}>{props.marker.title}</Text>
-                    <Text style={styles.author}>Author: {props.marker.user.username}</Text>
                 </View>
                 <Pressable onPress={props.close} style={styles.closeView}>
                     <Ionicons style={styles.close} name="close"></Ionicons>
                 </Pressable>
             </View>
-            {!review && !reviewListing && (
+            {!review && !reviewListing && !editMarker && (
                 <ReviewDetails
+                    navigation={props.navigation}
                     imageToLoad={imageToLoad}
                     score={score}
                     getReviewList={() => {
                         getReviewList();
                     }}
                     marker={props.marker}
+                    editMarker={() => {
+                        setEditMarker(true);
+                    }}
                 />
             )}
             {review && (
@@ -133,13 +140,34 @@ export function MarkerCard(props) {
                     }}
                 />
             )}
+            {editMarker && (
+                <EditMarker
+                    back={() => {
+                        setEditMarker(false);
+                    }}
+                    setMarkerTitle={(title) => {
+                        setTitle(title);
+                    }}
+                    setMarkerDescription={(description) => {
+                        setDescription(description);
+                    }}
+                    title={title}
+                    description={description}
+                    edit={() => {
+                        updateMarker(props.marker.id, title, description);
+                        setEditMarker(false);
+                        props.marker.title = title;
+                        props.marker.description = description;
+                    }}
+                />
+            )}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     markerCard: {
-        height: 470,
+        height: 550,
         width: "95%",
         backgroundColor: "#FFFFFF",
         position: "absolute",
