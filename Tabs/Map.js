@@ -5,7 +5,7 @@ import * as Location from "expo-location";
 import { StyleSheet, View, Dimensions, Alert, Text, Picker } from "react-native";
 import { LocationButton, AddLocationButton } from "./Components/Button";
 import { AddLocationCard } from "./Components/AddLocationCard";
-import { getMarkers } from "../utils/MapHelper";
+import { deleteMarker, getMarkers } from "../utils/MapHelper";
 import { MarkerCard } from "./Components/MarkerCard";
 import Firebase from "../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
@@ -201,6 +201,11 @@ export function Map({ route, navigation }) {
             {markerCard && disabledMap && (
                 <MarkerCard
                     marker={markerCard}
+                    deleteMarker={() => {
+                        setMarkerCard(null);
+                        gettingMarkers(selectedFilter);
+                        deleteMarker(markerCard.id);
+                    }}
                     close={() => {
                         setMarkerCard(null);
                     }}

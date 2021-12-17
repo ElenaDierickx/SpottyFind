@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, Alert } from "react-native";
 import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton, UserButton } from "../Button";
@@ -7,10 +7,25 @@ import Firebase from "../../../Config/Firebase";
 import { getMarkerImage } from "../../../utils/Imaging";
 
 export function EditMarker(props) {
+    const deleteMarker = () => {
+        Alert.alert("Delete Marker", "Are you sure you want to delete this marker?", [
+            {
+                text: "cancel",
+            },
+            {
+                text: "delete",
+                onPress: props.delete,
+            },
+        ]);
+    };
     return (
         <View>
+            <CardButton style={styles.deleteButton} func={deleteMarker}>
+                Delete
+            </CardButton>
             <Text style={styles.subtitle}>Edit Marker</Text>
             <View>
+                <Text>Title</Text>
                 <TextInput
                     placeholder="Title"
                     onChangeText={(title) => props.setMarkerTitle(title)}
@@ -18,6 +33,7 @@ export function EditMarker(props) {
                     style={styles.input}
                     maxLength={30}
                 />
+                <Text>Description</Text>
                 <TextInput
                     placeholder="Description"
                     onChangeText={(description) => props.setMarkerDescription(description)}
@@ -38,7 +54,7 @@ export function EditMarker(props) {
 const styles = StyleSheet.create({
     buttons: {
         flexDirection: "row",
-        marginTop: 150,
+        marginTop: 75,
         justifyContent: "space-between",
     },
     input: {
@@ -47,7 +63,9 @@ const styles = StyleSheet.create({
         height: 40,
         paddingLeft: 5,
         alignSelf: "center",
-        width: "95%",
+        width: "100%",
+        marginBottom: 20,
+        marginTop: 3,
     },
 
     description: {
@@ -56,15 +74,19 @@ const styles = StyleSheet.create({
         height: 120,
         paddingLeft: 5,
         alignSelf: "center",
-        width: "95%",
-        marginTop: 20,
+        width: "100%",
         textAlignVertical: "top",
         paddingTop: 5,
+        marginTop: 3,
     },
     subtitle: {
         fontSize: 20,
         fontWeight: "bold",
-        marginBottom: 50,
+        marginBottom: 20,
+        marginTop: 10,
+    },
+    deleteButton: {
         marginTop: 15,
+        width: "100%",
     },
 });

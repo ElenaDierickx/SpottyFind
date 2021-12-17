@@ -158,9 +158,17 @@ export const hasReview = async (markerid) => {
     return ownReview;
 };
 
-export const updateMarker = async (markerId, title, description) => {
+export const updateMarker = (markerId, title, description) => {
     Firebase.firestore().collection("markers").doc(markerId).update({
         title: title,
         description: description,
+    });
+};
+
+export const deleteMarker = async (markerId) => {
+    Firebase.firestore().collection("markers").doc(markerId).delete();
+    var deleteThis = await Firebase.firestore().collectionGroup("notifications").where("marker", "==", markerId).get();
+    deleteThis.forEach((notification) => {
+        notification.ref.delete();
     });
 };

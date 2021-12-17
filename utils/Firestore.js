@@ -307,9 +307,12 @@ export const unseenNotifications = async () => {
 
 export const getMarker = async (markerid) => {
     const marker = await Firebase.firestore().collection("markers").doc(markerid).get();
+
     var markerObj = marker.data();
-    markerObj.id = marker.id;
-    return markerObj;
+    if (markerObj) {
+        markerObj.id = marker.id;
+        return markerObj;
+    }
 };
 
 export const setSeen = async (notifications) => {

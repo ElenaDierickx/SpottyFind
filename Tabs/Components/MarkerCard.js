@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, ProgressBarAndroidComponent } from "react-native";
-import { postReview, getReviews, getReviewScore, hasReview, updateReview, updateMarker } from "../../utils/MapHelper";
+import { postReview, getReviews, getReviewScore, hasReview, updateReview, updateMarker, deleteMarker } from "../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "./Button";
 import Firebase from "../../Config/Firebase";
@@ -9,6 +9,7 @@ import { ReviewList } from "./MarkerCard/ReviewList";
 import { ReviewPlace } from "./MarkerCard/ReviewPlace";
 import { EditMarker } from "./MarkerCard/EditMarker";
 import { getMarkerImage } from "../../utils/Imaging";
+import { useLinkProps } from "@react-navigation/native";
 
 export function MarkerCard(props) {
     const [image, setImage] = useState(null);
@@ -159,6 +160,7 @@ export function MarkerCard(props) {
                         props.marker.title = title;
                         props.marker.description = description;
                     }}
+                    delete={props.deleteMarker}
                 />
             )}
         </View>
