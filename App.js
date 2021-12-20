@@ -94,6 +94,7 @@ export default function App() {
                     <Tab.Screen
                         name="People"
                         component={PeopleStackScreen}
+                        unmountOnBlur={true}
                         options={{
                             tabBarIcon: ({ color }) => <Ionicons name="people-outline" color={color} size={22}></Ionicons>,
                             headerShown: false,

@@ -1,9 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import { getFollowingList } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
 import Firebase from "../../Config/Firebase";
+import { Ionicons } from "@expo/vector-icons";
 
 export function FollowingScreen({ route, navigation }) {
     const { uid, account } = route.params;
@@ -22,7 +23,16 @@ export function FollowingScreen({ route, navigation }) {
         <View style={styles.container}>
             <StatusBar style="auto" />
             <View>
-                <Text style={styles.followingText}>Following</Text>
+                <View style={styles.topView}>
+                    <Text style={styles.followingText}>Following</Text>
+                    <Pressable
+                        onPress={() => {
+                            navigation.goBack(null);
+                        }}
+                    >
+                        <Ionicons style={styles.backButton} name="arrow-back-outline"></Ionicons>
+                    </Pressable>
+                </View>
                 <ScrollView>
                     {following.map((follow, index) => {
                         return (
@@ -37,6 +47,7 @@ export function FollowingScreen({ route, navigation }) {
                                     } else if (account) {
                                         navigation.navigate("People", {
                                             screen: "UserStack",
+                                            initial: false,
                                             params: {
                                                 uid: follow.id,
                                             },
@@ -67,6 +78,15 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         fontWeight: "bold",
         fontSize: 26,
+    },
+    topView: {
+        flexDirection: "row",
+        justifyContent: "space-between",
         marginBottom: 20,
+    },
+    backButton: {
+        fontSize: 26,
+        alignSelf: "center",
+        marginRight: 20,
     },
 });

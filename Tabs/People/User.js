@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { SmallButton, StatButton } from "./../Components/Button";
-import { useFocusEffect } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
 import {
     getIsFollowing,
     getFollowerStat,
@@ -14,7 +14,8 @@ import {
 } from "../../utils/Firestore";
 import { downloadImage } from "../../utils/Imaging";
 import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList } from "react-native";
-import Firebase from "../../Config/Firebase";
+
+import { Ionicons } from "@expo/vector-icons";
 
 export function UserScreen({ route, navigation }) {
     const { uid } = route.params;
@@ -73,13 +74,13 @@ export function UserScreen({ route, navigation }) {
             <StatusBar style="auto" />
             <View>
                 <View style={styles.topButtons}>
-                    <SmallButton
-                        func={() => {
+                    <Pressable
+                        onPress={() => {
                             navigation.navigate("PeopleStack");
                         }}
                     >
-                        Close
-                    </SmallButton>
+                        <Ionicons style={styles.backButton} name="arrow-back-outline"></Ionicons>
+                    </Pressable>
                     <SmallButton func={followUser}>
                         {!following && "Follow"}
                         {following && "Unfollow"}
@@ -172,5 +173,11 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         marginLeft: 10,
         marginRight: 10,
+    },
+    backButton: {
+        fontSize: 26,
+        alignSelf: "center",
+        marginTop: 50,
+        marginLeft: 10,
     },
 });

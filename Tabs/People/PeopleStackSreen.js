@@ -10,7 +10,7 @@ const PeopleStack = createNativeStackNavigator();
 
 export function PeopleStackScreen() {
     return (
-        <PeopleStack.Navigator>
+        <PeopleStack.Navigator initialRouteName="PeopleStack">
             <PeopleStack.Screen
                 name="PeopleStack"
                 component={SearchPeopleScreen}

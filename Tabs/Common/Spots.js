@@ -1,8 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import { getMarkersList } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
+import { Ionicons } from "@expo/vector-icons";
 
 export function SpotsScreen({ route, navigation }) {
     const { uid } = route.params;
@@ -21,7 +22,17 @@ export function SpotsScreen({ route, navigation }) {
         <View style={styles.container}>
             <StatusBar style="auto" />
             <View>
-                <Text style={styles.followingText}>Spots</Text>
+                <View style={styles.topView}>
+                    <Text style={styles.followingText}>Spots</Text>
+                    <Pressable
+                        onPress={() => {
+                            navigation.goBack(null);
+                        }}
+                    >
+                        <Ionicons style={styles.backButton} name="arrow-back-outline"></Ionicons>
+                    </Pressable>
+                </View>
+
                 <ScrollView>
                     {markers.map((marker, index) => {
                         return (
@@ -55,6 +66,15 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         fontWeight: "bold",
         fontSize: 26,
+    },
+    topView: {
+        flexDirection: "row",
+        justifyContent: "space-between",
         marginBottom: 20,
+    },
+    backButton: {
+        fontSize: 26,
+        alignSelf: "center",
+        marginRight: 20,
     },
 });

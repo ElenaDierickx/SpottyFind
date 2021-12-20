@@ -5,6 +5,7 @@ import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import { getFollowingList, getUserSearch } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
+import { Ionicons } from "@expo/vector-icons";
 
 export function SearchPeopleScreen({ navigation }) {
     const [searchInput, setSearchInput] = useState("");
