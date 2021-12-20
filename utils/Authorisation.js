@@ -1,10 +1,27 @@
 import React from "react";
 import Firebase from "../Config/Firebase";
 import * as Notifications from "expo-notifications";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const auth = Firebase.auth();
 
 export const logOut = async () => {
+    const user = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
+    const tokens = user.data().expoPushToken;
+
+    const value = await AsyncStorage.getItem("@pushToken");
+    if (value) {
+        const index = tokens.indexOf(value);
+        if (index > -1) {
+            tokens.splice(index, 1);
+            console.log(tokens);
+        }
+    }
+
+    Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).update({
+        expoPushToken: tokens,
+    });
+
     auth.signOut();
 };
 
@@ -37,8 +54,21 @@ const registerForPushNotificationsAsync = async () => {
 const registerPushNotifications = async () => {
     var token = await registerForPushNotificationsAsync();
 
+    const user = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
+    var tokens = user.data().expoPushToken;
+
+    if (!tokens) {
+        tokens = [];
+    }
+
+    if (!tokens.includes(token)) {
+        tokens.push(token);
+    }
+
+    await AsyncStorage.setItem("@pushToken", token);
+
     Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).update({
-        expoPushToken: token,
+        expoPushToken: tokens,
     });
 };
 
