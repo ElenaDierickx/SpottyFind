@@ -45,7 +45,7 @@ export function SearchPeopleScreen({ navigation }) {
                     {users &&
                         users.map((user, index) => {
                             return (
-                                <UserButton key={index} img={user.image} func={() => navigation.push("UserStack", { uid: user.id })}>
+                                <UserButton key={index} img={user.image} func={() => navigation.navigate("UserStack", { uid: user.id })}>
                                     {user.username}
                                 </UserButton>
                             );
@@ -64,7 +64,7 @@ export function SearchPeopleScreen({ navigation }) {
                                             screen: "AccountStack",
                                         });
                                     } else {
-                                        navigation.push("UserStack", { uid: follow.id });
+                                        navigation.navigate("UserStack", { uid: follow.id });
                                     }
                                 }}
                             >

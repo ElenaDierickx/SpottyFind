@@ -67,7 +67,9 @@ export function AccountScreen({ navigation }) {
         <View style={styles.container}>
             <StatusBar style="auto" />
             <View>
-                <SmallButton func={() => logOutPress()}>Log Out</SmallButton>
+                <View style={styles.topButtons}>
+                    <SmallButton func={() => logOutPress()}>Log Out</SmallButton>
+                </View>
                 <Pressable onPress={ImageUploading}>
                     <Image style={styles.logo} source={imageToLoad} />
                 </Pressable>
@@ -160,5 +162,8 @@ const styles = StyleSheet.create({
     },
     statButtons: {
         marginTop: 60,
+    },
+    topButtons: {
+        marginRight: 10,
     },
 });

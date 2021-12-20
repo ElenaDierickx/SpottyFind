@@ -40,7 +40,7 @@ export function FollowersScreen({ route, navigation }) {
                                             },
                                         });
                                     } else {
-                                        navigation.push("UserStack", { uid: follower.id });
+                                        navigation.navigate("UserStack", { uid: follower.id });
                                     }
                                 }}
                             >

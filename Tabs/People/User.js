@@ -72,10 +72,20 @@ export function UserScreen({ route, navigation }) {
         <View style={styles.container}>
             <StatusBar style="auto" />
             <View>
-                <SmallButton func={followUser}>
-                    {!following && "Follow"}
-                    {following && "Unfollow"}
-                </SmallButton>
+                <View style={styles.topButtons}>
+                    <SmallButton
+                        func={() => {
+                            navigation.navigate("PeopleStack");
+                        }}
+                    >
+                        Close
+                    </SmallButton>
+                    <SmallButton func={followUser}>
+                        {!following && "Follow"}
+                        {following && "Unfollow"}
+                    </SmallButton>
+                </View>
+
                 <Image style={styles.logo} source={imageToLoad} />
             </View>
             <Text style={styles.username}>{username}</Text>
@@ -101,21 +111,21 @@ export function UserScreen({ route, navigation }) {
             <View style={styles.statButtons}>
                 <StatButton
                     func={() => {
-                        navigation.push("SpotsStack", { uid: uid });
+                        navigation.navigate("SpotsStack", { uid: uid });
                     }}
                 >
                     Spots
                 </StatButton>
                 <StatButton
                     func={() => {
-                        navigation.push("FollowersStack", { uid: uid, account: false });
+                        navigation.navigate("FollowersStack", { uid: uid, account: false });
                     }}
                 >
                     Followers
                 </StatButton>
                 <StatButton
                     func={() => {
-                        navigation.push("FollowingStack", { uid: uid, account: false });
+                        navigation.navigate("FollowingStack", { uid: uid, account: false });
                     }}
                 >
                     Following
@@ -157,4 +167,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     statButtons: { marginTop: 60 },
+    topButtons: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginLeft: 10,
+        marginRight: 10,
+    },
 });

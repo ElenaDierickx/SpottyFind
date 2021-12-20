@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 50,
         alignSelf: "flex-end",
-        marginRight: 25,
     },
     cardButton: {
         backgroundColor: "#2CCB33",
