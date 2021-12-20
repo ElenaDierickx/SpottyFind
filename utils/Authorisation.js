@@ -5,6 +5,9 @@ import * as Notifications from "expo-notifications";
 const auth = Firebase.auth();
 
 export const logOut = async () => {
+    const user = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
+    const tokens = user.data().expoPushToken;
+
     auth.signOut();
 };
 
@@ -37,8 +40,19 @@ const registerForPushNotificationsAsync = async () => {
 const registerPushNotifications = async () => {
     var token = await registerForPushNotificationsAsync();
 
+    const user = await Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).get();
+    var tokens = user.data().expoPushToken;
+
+    if (!tokens) {
+        tokens = [];
+    }
+
+    if (!tokens.includes(token)) {
+        tokens.push(token);
+    }
+
     Firebase.firestore().collection("users").doc(Firebase.auth().currentUser.uid).update({
-        expoPushToken: token,
+        expoPushToken: tokens,
     });
 };
 
