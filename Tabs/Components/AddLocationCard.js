@@ -38,7 +38,7 @@ export function AddLocationCard(props) {
 
     return (
         <View style={styles.addLocationCard}>
-            <TextInput placeholder="Title" onChangeText={(title) => setTitle(title)} defaultValue={title} style={styles.input} maxLength={30} />
+            <TextInput placeholder="Title" onChangeText={(title) => setTitle(title)} defaultValue={title} style={styles.input} maxLength={12} />
             <Pressable
                 onPress={() => {
                     pressedImage();

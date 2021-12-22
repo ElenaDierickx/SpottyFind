@@ -19,20 +19,24 @@ export function ReviewList(props) {
                         return (
                             <View style={styles.reviewContainer} key={index}>
                                 <View style={styles.singleReview}>
-                                    <Image source={imageToLoad} style={styles.userImage} />
-                                    <Text style={styles.profileName}>{review.userdata.username}</Text>
-                                    <Text style={styles.score}>{review.score}</Text>
-                                    <View style={styles.starsSingle}>
-                                        {review.score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                        {review.score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                        {review.score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                        {review.score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                        {review.score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                        {review.score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                        {review.score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                        {review.score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
-                                        {review.score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
-                                        {review.score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                    <View style={styles.row}>
+                                        <Image source={imageToLoad} style={styles.userImage} />
+                                        <Text style={styles.profileName}>{review.userdata.username}</Text>
+                                    </View>
+                                    <View style={styles.row}>
+                                        <Text style={styles.score}>{review.score}</Text>
+                                        <View style={styles.starsSingle}>
+                                            {review.score >= 1 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 1 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 2 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 2 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 3 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 3 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 4 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 4 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                            {review.score >= 5 && <Ionicons style={styles.star} name="star"></Ionicons>}
+                                            {review.score < 5 && <Ionicons style={styles.star} name="star-outline"></Ionicons>}
+                                        </View>
                                     </View>
                                 </View>
                                 <Text style={styles.singleDescription}>{review.review}</Text>
@@ -56,12 +60,12 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     score: {
-        fontSize: 40,
+        fontSize: 26,
+        alignSelf: "center",
     },
     stars: {
         flexDirection: "row",
         alignSelf: "center",
-        marginLeft: 5,
     },
     star: {
         color: "yellow",
@@ -74,6 +78,8 @@ const styles = StyleSheet.create({
     },
     singleReview: {
         flexDirection: "row",
+        justifyContent: "space-between",
+        marginRight: 10,
     },
     buttons: {
         flexDirection: "row",
@@ -81,14 +87,13 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     userImage: {
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
         borderRadius: 100,
     },
     profileName: {
         alignSelf: "center",
-        marginLeft: 10,
-        fontWeight: "bold",
+        marginLeft: 5,
         fontSize: 16,
         marginRight: 40,
     },
@@ -106,5 +111,8 @@ const styles = StyleSheet.create({
     },
     reviewsContainer: {
         height: 400.5,
+    },
+    row: {
+        flexDirection: "row",
     },
 });

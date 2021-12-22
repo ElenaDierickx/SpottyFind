@@ -39,6 +39,7 @@ export function RegisterScreen({ navigation }) {
                     defaultValue={username}
                     autoCapitalize="none"
                     style={styles.input}
+                    maxLength={11}
                 />
                 <TextInput
                     placeholder="Password"
