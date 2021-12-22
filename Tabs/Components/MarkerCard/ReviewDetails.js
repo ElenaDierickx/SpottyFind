@@ -42,17 +42,19 @@ export function ReviewDetails(props) {
                     <Pressable
                         style={styles.details}
                         onPress={() => {
-                            if (props.marker.user.id == Firebase.auth().currentUser.uid) {
-                                props.navigation.navigate("Account", {
-                                    screen: "AccountStack",
-                                });
-                            } else {
-                                props.navigation.navigate("People", {
-                                    screen: "UserStack",
-                                    params: {
-                                        uid: props.marker.user.id,
-                                    },
-                                });
+                            if (Firebase.auth.currentUser) {
+                                if (props.marker.user.id == Firebase.auth().currentUser.uid) {
+                                    props.navigation.navigate("Account", {
+                                        screen: "AccountStack",
+                                    });
+                                } else {
+                                    props.navigation.navigate("People", {
+                                        screen: "UserStack",
+                                        params: {
+                                            uid: props.marker.user.id,
+                                        },
+                                    });
+                                }
                             }
                         }}
                     >
@@ -61,7 +63,7 @@ export function ReviewDetails(props) {
                                 <Image source={imageToLoad} style={styles.userimage} />
                                 <Text>{props.marker.user.username}</Text>
                             </View>
-                            {Firebase.auth().currentUser.uid == props.marker.user.id && (
+                            {Firebase.auth().currentUser && Firebase.auth().currentUser.uid == props.marker.user.id && (
                                 <CardButton style={styles.reviewButton} func={props.editMarker}>
                                     Edit Marker
                                 </CardButton>
