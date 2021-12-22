@@ -33,7 +33,13 @@ export function RegisterScreen({ navigation }) {
                     defaultValue={email}
                     style={styles.input}
                 />
-                <TextInput placeholder="Username" onChangeText={(username) => setUsername(username)} defaultValue={username} style={styles.input} />
+                <TextInput
+                    placeholder="Username"
+                    onChangeText={(username) => setUsername(username)}
+                    defaultValue={username}
+                    cap
+                    style={styles.input}
+                />
                 <TextInput
                     placeholder="Password"
                     onChangeText={(password) => setPassword(password)}
@@ -41,10 +47,10 @@ export function RegisterScreen({ navigation }) {
                     style={styles.input}
                     secureTextEntry={true}
                 />
+                <Text style={styles.error}>{loginError}</Text>
                 <Button func={onCreate}>Create</Button>
                 <Text style={styles.already}>Already have an account?</Text>
                 <Button func={() => navigation.navigate("LoginStack")}>Log in</Button>
-                <Text>{loginError}</Text>
             </View>
         </View>
     );
@@ -94,5 +100,9 @@ const styles = StyleSheet.create({
     already: {
         textAlign: "center",
         marginTop: 20,
+    },
+    error: {
+        color: "red",
+        alignSelf: "center",
     },
 });

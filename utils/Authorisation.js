@@ -85,6 +85,11 @@ export const loginUser = async (email, password) => {
 };
 
 export const createUser = async (email, password, username) => {
+    username = username.toLowerCase();
+    const users = await Firebase.firestore().collection("users").where("username", "==", username).get();
+    if (users.size > 0) {
+        return "This username already exists.";
+    }
     try {
         if (email !== "" && password !== "") {
             let user = await auth.createUserWithEmailAndPassword(email, password);
