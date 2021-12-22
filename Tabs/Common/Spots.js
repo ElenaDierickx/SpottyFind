@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable, ActivityIndicator } from "react-native";
 import { getMarkersList } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,10 +8,12 @@ import { Ionicons } from "@expo/vector-icons";
 export function SpotsScreen({ route, navigation }) {
     const { uid } = route.params;
     const [markers, setMarkers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const getFollowing = async () => {
         var markers = await getMarkersList(uid, navigation);
         setMarkers(markers);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -34,21 +36,23 @@ export function SpotsScreen({ route, navigation }) {
                 </View>
 
                 <ScrollView>
-                    {markers.map((marker, index) => {
-                        return (
-                            <UserButton
-                                func={() => {
-                                    navigation.navigate("Map", {
-                                        initialMarker: marker,
-                                    });
-                                }}
-                                key={index}
-                                img={marker.image}
-                            >
-                                {marker.title}
-                            </UserButton>
-                        );
-                    })}
+                    {loading && <ActivityIndicator animating={true} size="large" color="#2CCB33" />}
+                    {!loading &&
+                        markers.map((marker, index) => {
+                            return (
+                                <UserButton
+                                    func={() => {
+                                        navigation.navigate("Map", {
+                                            initialMarker: marker,
+                                        });
+                                    }}
+                                    key={index}
+                                    img={marker.image}
+                                >
+                                    {marker.title}
+                                </UserButton>
+                            );
+                        })}
                 </ScrollView>
             </View>
         </View>

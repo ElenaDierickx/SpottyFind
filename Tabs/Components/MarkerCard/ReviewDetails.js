@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, ActivityIndicator } from "react-native";
 import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton, UserButton } from "../Button";
@@ -8,6 +8,9 @@ import { getMarkerImage } from "../../../utils/Imaging";
 
 export function ReviewDetails(props) {
     const imageToLoad = props.marker.user.img ? { uri: props.marker.user.img } : require("./../../../img/account.png");
+    if (props.loading) {
+        return <ActivityIndicator animating={true} style={styles.indicator} size="large" color="#2CCB33" />;
+    }
     return (
         <View>
             <Image style={styles.image} source={props.imageToLoad} />
@@ -76,6 +79,11 @@ export function ReviewDetails(props) {
 }
 
 const styles = StyleSheet.create({
+    indicator: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
     image: {
         marginTop: 10,
         width: 320,

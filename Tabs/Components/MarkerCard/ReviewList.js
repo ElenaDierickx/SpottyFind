@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, ActivityIndicator } from "react-native";
 import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "../Button";
@@ -7,6 +7,9 @@ import Firebase from "../../../Config/Firebase";
 import { getMarkerImage } from "../../../utils/Imaging";
 
 export function ReviewList(props) {
+    if (props.loading) {
+        return <ActivityIndicator animating={true} style={styles.indicator} size="large" color="#2CCB33" />;
+    }
     return (
         <View>
             <ScrollView style={styles.reviewsContainer}>
@@ -47,6 +50,11 @@ export function ReviewList(props) {
 }
 
 const styles = StyleSheet.create({
+    indicator: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
     score: {
         fontSize: 40,
     },

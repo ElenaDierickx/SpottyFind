@@ -1,8 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Button, GoToButton, SmallButton, StatButton } from "./../Components/Button";
+import { StyleSheet, Text, View, Image, Pressable, ActivityIndicator } from "react-native";
+import { SmallButton, StatButton } from "./../Components/Button";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import { uploadImage, downloadImage } from "../../utils/Imaging";
@@ -16,6 +15,7 @@ export function AccountScreen({ navigation }) {
     const [markers, setMarkers] = useState(0);
     const [image, setImage] = useState(false);
     const [reviews, setReviews] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const onRender = async () => {
         var user = Firebase.auth().currentUser;
@@ -29,6 +29,8 @@ export function AccountScreen({ navigation }) {
         setMarkers(await getMarkersStat(user.uid));
 
         setReviews(await getReviewAmounts(user.uid));
+
+        setLoading(false);
     };
 
     const GetImage = async () => {
@@ -62,6 +64,14 @@ export function AccountScreen({ navigation }) {
     };
 
     const imageToLoad = image ? { uri: image } : require("./../../img/account.png");
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator animating={true} style={styles.indicator} size="large" color="#2CCB33" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -134,6 +144,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         justifyContent: "flex-start",
+    },
+    indicator: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
     },
     logo: {
         alignSelf: "center",

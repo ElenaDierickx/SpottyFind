@@ -23,6 +23,8 @@ export function MarkerCard(props) {
     const [editMarker, setEditMarker] = useState(null);
     const [title, setTitle] = useState(props.marker.title);
     const [description, setDescription] = useState(props.marker.description);
+    const [loadDetails, setLoadDetails] = useState(true);
+    const [loadReviews, setLoadReviews] = useState(true);
 
     const imageToLoad = image ? { uri: image } : require("./../../img/account.png");
 
@@ -44,12 +46,15 @@ export function MarkerCard(props) {
                 setStars(reviewed.score);
             }
         }
+
+        setLoadDetails(false);
     };
 
     const getReviewList = async () => {
         setReviewListing(true);
         const reviews = await getReviews(props.marker.id);
         setReviewList(reviews);
+        setLoadReviews(false);
     };
 
     const placeReview = () => {
@@ -67,6 +72,8 @@ export function MarkerCard(props) {
     };
 
     useEffect(() => {
+        setLoadDetails(true);
+        setLoadReviews(true);
         onRender();
         setReview(false);
         setReviewList(null);
@@ -102,6 +109,7 @@ export function MarkerCard(props) {
                     editMarker={() => {
                         setEditMarker(true);
                     }}
+                    loading={loadDetails}
                 />
             )}
             {review && (
@@ -139,6 +147,7 @@ export function MarkerCard(props) {
                         setReviewListing(false);
                         setReview(true);
                     }}
+                    loading={loadReviews}
                 />
             )}
             {editMarker && (

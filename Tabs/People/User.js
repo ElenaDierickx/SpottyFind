@@ -1,7 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { SmallButton, StatButton } from "./../Components/Button";
-import { CommonActions } from "@react-navigation/native";
 import {
     getIsFollowing,
     getFollowerStat,
@@ -13,7 +12,7 @@ import {
     getReviewAmounts,
 } from "../../utils/Firestore";
 import { downloadImage } from "../../utils/Imaging";
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList } from "react-native";
+import { StyleSheet, Text, View, TextInput, Image, Pressable, ActivityIndicator } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -26,6 +25,7 @@ export function UserScreen({ route, navigation }) {
     const [markers, setMarkers] = useState(0);
     const [image, setImage] = useState(false);
     const [reviews, setReviews] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const onRender = async () => {
         setFollowing(await getIsFollowing(uid));
@@ -40,6 +40,8 @@ export function UserScreen({ route, navigation }) {
         setMarkers(await getMarkersStat(uid));
 
         setReviews(await getReviewAmounts(uid));
+
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -68,6 +70,14 @@ export function UserScreen({ route, navigation }) {
         }
         setFollowersStat(await getFollowerStat(uid));
     };
+
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator animating={true} style={styles.indicator} size="large" color="#2CCB33" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -141,6 +151,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         justifyContent: "flex-start",
+    },
+    indicator: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
     },
     logo: {
         alignSelf: "center",

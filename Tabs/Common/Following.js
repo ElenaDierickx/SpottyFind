@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable, ActivityIndicator } from "react-native";
 import { getFollowingList } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
 import Firebase from "../../Config/Firebase";
@@ -9,10 +9,12 @@ import { Ionicons } from "@expo/vector-icons";
 export function FollowingScreen({ route, navigation }) {
     const { uid, account } = route.params;
     const [following, setFollowing] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const getFollowing = async () => {
         var following = await getFollowingList(uid);
         setFollowing(following);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -34,33 +36,35 @@ export function FollowingScreen({ route, navigation }) {
                     </Pressable>
                 </View>
                 <ScrollView>
-                    {following.map((follow, index) => {
-                        return (
-                            <UserButton
-                                key={index}
-                                img={follow.image}
-                                func={() => {
-                                    if (follow.id == Firebase.auth().currentUser.uid) {
-                                        navigation.navigate("Account", {
-                                            screen: "AccountStack",
-                                        });
-                                    } else if (account) {
-                                        navigation.navigate("People", {
-                                            screen: "UserStack",
-                                            initial: false,
-                                            params: {
-                                                uid: follow.id,
-                                            },
-                                        });
-                                    } else {
-                                        navigation.navigate("UserStack", { uid: follow.id });
-                                    }
-                                }}
-                            >
-                                {follow.username}
-                            </UserButton>
-                        );
-                    })}
+                    {loading && <ActivityIndicator animating={true} size="large" color="#2CCB33" />}
+                    {!loading &&
+                        following.map((follow, index) => {
+                            return (
+                                <UserButton
+                                    key={index}
+                                    img={follow.image}
+                                    func={() => {
+                                        if (follow.id == Firebase.auth().currentUser.uid) {
+                                            navigation.navigate("Account", {
+                                                screen: "AccountStack",
+                                            });
+                                        } else if (account) {
+                                            navigation.navigate("People", {
+                                                screen: "UserStack",
+                                                initial: false,
+                                                params: {
+                                                    uid: follow.id,
+                                                },
+                                            });
+                                        } else {
+                                            navigation.navigate("UserStack", { uid: follow.id });
+                                        }
+                                    }}
+                                >
+                                    {follow.username}
+                                </UserButton>
+                            );
+                        })}
                 </ScrollView>
             </View>
         </View>

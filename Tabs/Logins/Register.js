@@ -37,7 +37,7 @@ export function RegisterScreen({ navigation }) {
                     placeholder="Username"
                     onChangeText={(username) => setUsername(username)}
                     defaultValue={username}
-                    cap
+                    autoCapitalize="none"
                     style={styles.input}
                 />
                 <TextInput

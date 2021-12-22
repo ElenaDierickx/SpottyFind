@@ -1,16 +1,16 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList } from "react-native";
+import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, VirtualizedList, ActivityIndicator } from "react-native";
 import Firebase from "../../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
 import { getFollowingList, getUserSearch } from "../../utils/Firestore";
 import { UserButton } from "../Components/Button";
-import { Ionicons } from "@expo/vector-icons";
 
 export function SearchPeopleScreen({ navigation }) {
     const [searchInput, setSearchInput] = useState("");
     const [users, setUsers] = useState([]);
     const [following, setFollowing] = useState([]);
+    const [loadFollowing, setLoadFollowing] = useState(true);
 
     const getSearch = async () => {
         var users = await getUserSearch(searchInput);
@@ -24,6 +24,7 @@ export function SearchPeopleScreen({ navigation }) {
     const getFollowing = async () => {
         var following = await getFollowingList(Firebase.auth().currentUser.uid);
         setFollowing(following);
+        setLoadFollowing(false);
     };
 
     useFocusEffect(
@@ -39,6 +40,7 @@ export function SearchPeopleScreen({ navigation }) {
                 <TextInput
                     placeholder="Search other users"
                     onChangeText={(searchInput) => setSearchInput(searchInput)}
+                    autoCapitalize="none"
                     defaultValue={searchInput}
                     style={styles.input}
                 />
@@ -54,25 +56,27 @@ export function SearchPeopleScreen({ navigation }) {
                 </View>
                 <Text style={styles.followingText}>Following</Text>
                 <View>
-                    {following.map((follow, index) => {
-                        return (
-                            <UserButton
-                                key={index}
-                                img={follow.image}
-                                func={() => {
-                                    if (follow.id == Firebase.auth().currentUser.uid) {
-                                        navigation.navigate("Account", {
-                                            screen: "AccountStack",
-                                        });
-                                    } else {
-                                        navigation.navigate("UserStack", { uid: follow.id });
-                                    }
-                                }}
-                            >
-                                {follow.username}
-                            </UserButton>
-                        );
-                    })}
+                    {loadFollowing && <ActivityIndicator animating={true} style={styles.indicator} size="large" color="#2CCB33" />}
+                    {!loadFollowing &&
+                        following.map((follow, index) => {
+                            return (
+                                <UserButton
+                                    key={index}
+                                    img={follow.image}
+                                    func={() => {
+                                        if (follow.id == Firebase.auth().currentUser.uid) {
+                                            navigation.navigate("Account", {
+                                                screen: "AccountStack",
+                                            });
+                                        } else {
+                                            navigation.navigate("UserStack", { uid: follow.id });
+                                        }
+                                    }}
+                                >
+                                    {follow.username}
+                                </UserButton>
+                            );
+                        })}
                 </View>
             </View>
         </View>

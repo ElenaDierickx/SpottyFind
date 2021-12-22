@@ -68,6 +68,7 @@ export const getFollowersList = async (uid) => {
 };
 
 export const getUserSearch = async (searchInput) => {
+    searchInput = searchInput.toLowerCase();
     if (searchInput) {
         var users = await Firebase.firestore()
             .collection("users")
