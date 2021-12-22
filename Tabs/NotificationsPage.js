@@ -28,7 +28,9 @@ export function NotificationsPage({ navigation }) {
             <Text style={styles.title}>Notifications</Text>
             <ScrollView style={styles.notifications}>
                 {loading && <ActivityIndicator animating={true} size="large" color="#2CCB33" />}
+                {!loading && notifications.length == 0 && <Text style={styles.noYet}>No notifications yet</Text>}
                 {!loading &&
+                    notifications.length > 0 &&
                     notifications.map((notification, index) => {
                         const imageToLoad = notification.image ? { uri: notification.image } : require("./../img/account.png");
                         if (notification.type == "follow") {
@@ -100,4 +102,8 @@ const styles = StyleSheet.create({
     unseen: { backgroundColor: "grey" },
     reviewImage: { width: 60, height: 60, marginLeft: 10, borderRadius: 100 },
     reviewText: { alignSelf: "center", width: 250, marginLeft: 15 },
+    noYet: {
+        marginLeft: 20,
+        fontSize: 16,
+    },
 });

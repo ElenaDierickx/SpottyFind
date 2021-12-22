@@ -13,6 +13,7 @@ export function ReviewList(props) {
     return (
         <View>
             <ScrollView style={styles.reviewsContainer}>
+                {Object.keys(props.reviewList).length == 0 && <Text style={styles.noYet}>No reviews yet</Text>}
                 {props.reviewList &&
                     props.reviewList.map((review, index) => {
                         const imageToLoad = review.userdata.image ? { uri: review.userdata.image } : require("./../../../img/account.png");
@@ -114,5 +115,8 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row",
+    },
+    noYet: {
+        fontSize: 16,
     },
 });
