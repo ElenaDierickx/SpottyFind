@@ -42,9 +42,6 @@ export function LoginScreen({ navigation }) {
                 />
                 <Text style={styles.error}>{loginError}</Text>
                 <Button func={onLogin}>Log in</Button>
-                <Pressable onPress={() => Alert.alert("Beep")}>
-                    <Text style={styles.forgotPass}>Forgotten password?</Text>
-                </Pressable>
                 <Button
                     func={() => {
                         navigation.navigate("RegisterStack");

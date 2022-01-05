@@ -14,7 +14,6 @@ export const logOut = async () => {
         const index = tokens.indexOf(value);
         if (index > -1) {
             tokens.splice(index, 1);
-            console.log(tokens);
         }
     }
 
