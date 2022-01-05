@@ -148,6 +148,7 @@ export function Map({ route, navigation }) {
                                         setMarkerCard(marker);
                                     }
                                 }}
+                                pinColor={(marker.user.id == Firebase.auth().currentUser.uid && "green") || (marker.user.id != Firebase.auth().currentUser.uid && "red")}
                             />
                         );
                     })}
