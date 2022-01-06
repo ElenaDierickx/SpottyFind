@@ -134,10 +134,16 @@ export function Map({ route, navigation }) {
                 }}
             >
                 {markers &&
-                    markers.map((marker, index) => {
+                    markers.map((marker) => {
+                        var color = "red";
+                        if (Firebase.auth().currentUser) {
+                            if (Firebase.auth().currentUser.uid == marker.user.id) {
+                                color = "green";
+                            }
+                        }
                         return (
                             <Marker
-                                key={index}
+                                key={marker.id}
                                 coordinate={{
                                     latitude: marker.location.coords.latitude,
                                     longitude: marker.location.coords.longitude,
@@ -148,7 +154,7 @@ export function Map({ route, navigation }) {
                                         setMarkerCard(marker);
                                     }
                                 }}
-                                pinColor={(marker.user.id == Firebase.auth().currentUser.uid && "green") || (marker.user.id != Firebase.auth().currentUser.uid && "red")}
+                                pinColor={color}
                             />
                         );
                     })}

@@ -13,7 +13,7 @@
         ],
         "name": "SpottyFind",
         "slug": "spottyfind",
-        "version": "1.0.1",
+        "version": "1.0.3",
         "orientation": "portrait",
         "icon": "./img/logo.png",
         "splash": {
@@ -29,7 +29,7 @@
             "supportsTablet": true
         },
         "android": {
-            "versionCode": 2,
+            "versionCode": 4,
             "adaptiveIcon": {
                 "foregroundImage": "./img/logo.png",
                 "backgroundColor": "#FFFFFF"
@@ -39,7 +39,8 @@
                 "googleMaps": {
                     "apiKey": "AIzaSyCYQa881E4BoFyJ50iqcPSqDv2OmKSTjkI"
                 }
-            }
+            },
+            "googleServicesFile": "./google-services.json"
         },
         "web": {
             "favicon": "./assets/favicon.png"
