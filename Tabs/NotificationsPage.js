@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "#fff", justifyContent: "flex-start" },
     title: { marginTop: 50, marginLeft: 20, fontSize: 24, fontWeight: "bold" },
     notifications: { marginTop: 10 },
-    notification: { flexDirection: "row", alignContent: "center", marginTop: 20, paddingTop: 2, paddingBottom: 2 },
-    unseen: { backgroundColor: "grey" },
+    notification: { flexDirection: "row", alignContent: "center", paddingTop: 12, paddingBottom: 12 },
+    unseen: { backgroundColor: "#E7E7E7" },
     reviewImage: { width: 60, height: 60, marginLeft: 10, borderRadius: 100 },
     reviewText: { alignSelf: "center", width: 250, marginLeft: 15 },
     noYet: {

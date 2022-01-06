@@ -9,6 +9,7 @@ import { deleteMarker, getMarkers } from "../utils/MapHelper";
 import { MarkerCard } from "./Components/MarkerCard";
 import Firebase from "../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
+import { createPortal } from "react-dom";
 
 const map = React.createRef();
 
@@ -44,7 +45,9 @@ export function Map({ route, navigation }) {
     };
 
     const gettingMarkers = async (filter) => {
-        if (filter) {
+        if (!Firebase.auth().currentUser) {
+            var markers = await getMarkers("all");
+        } else if (filter) {
             var markers = await getMarkers(filter);
         } else {
             var markers = await getMarkers(selectedFilter);
@@ -143,7 +146,7 @@ export function Map({ route, navigation }) {
                         }
                         return (
                             <Marker
-                                key={marker.id}
+                                key={marker.id + color}
                                 coordinate={{
                                     latitude: marker.location.coords.latitude,
                                     longitude: marker.location.coords.longitude,
@@ -160,20 +163,22 @@ export function Map({ route, navigation }) {
                     })}
             </MapView>
 
-            <View style={styles.filterContainer}>
-                <Picker
-                    selectedValue={selectedFilter}
-                    style={styles.filter}
-                    itemStyle={styles.filteritem}
-                    onValueChange={(itemValue, itemIndex) => {
-                        setSelectedFilter(itemValue);
-                        gettingMarkers(itemValue);
-                    }}
-                >
-                    <Picker.Item label="All" value="all" />
-                    <Picker.Item label="Following" value="following" />
-                </Picker>
-            </View>
+            {Firebase.auth().currentUser && (
+                <View style={styles.filterContainer}>
+                    <Picker
+                        selectedValue={selectedFilter}
+                        style={styles.filter}
+                        itemStyle={styles.filteritem}
+                        onValueChange={(itemValue, itemIndex) => {
+                            setSelectedFilter(itemValue);
+                            gettingMarkers(itemValue);
+                        }}
+                    >
+                        <Picker.Item label="All" value="all" />
+                        <Picker.Item label="Following" value="following" />
+                    </Picker>
+                </View>
+            )}
 
             <LocationButton
                 onPress={async () => {
