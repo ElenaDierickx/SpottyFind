@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 export function Button(props) {
     return (
-        <Pressable style={styles.button} onPress={props.func}>
+        <Pressable style={[styles.button, props.style]} onPress={props.func}>
             <Text style={styles.buttonText}>{props.children}</Text>
         </Pressable>
     );

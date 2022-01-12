@@ -78,6 +78,7 @@ export const loginUser = async (email, password) => {
             registerPushNotifications();
             return false;
         }
+        return "Please enter your email and password.";
     } catch (error) {
         return error.message;
     }
@@ -99,7 +100,22 @@ export const createUser = async (email, password, username) => {
             registerPushNotifications();
             return false;
         }
+        return "Please enter your email and password.";
     } catch (error) {
         return error.message;
     }
+};
+
+export const forgotPassword = async (email) => {
+    if (!email) {
+        return "Please enter an email adress";
+    }
+    Firebase.auth()
+        .sendPasswordResetEmail(email)
+        .then(() => {
+            return false;
+        })
+        .catch((error) => {
+            return error.message;
+        });
 };

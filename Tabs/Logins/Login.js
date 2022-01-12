@@ -3,12 +3,13 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, KeyboardAvoidingView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button, GoToButton } from "./../Components/Button";
-import { loginUser } from "../../utils/Authorisation";
+import { loginUser, forgotPassword } from "../../utils/Authorisation";
 
 export function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
+    const [passwordReset, setPasswordReset] = useState(null);
 
     const onLogin = async () => {
         var error = await loginUser(email, password);
@@ -16,6 +17,18 @@ export function LoginScreen({ navigation }) {
             setLoginError(error);
         } else {
             navigation.navigate("Map");
+        }
+    };
+
+    const onPasswordReset = async () => {
+        var error = await forgotPassword(email);
+        if (error) {
+            setLoginError(error);
+        } else {
+            setPasswordReset("An email has been sent to " + email);
+            setTimeout(() => {
+                setPasswordReset(null);
+            }, 3000);
         }
     };
 
@@ -42,6 +55,9 @@ export function LoginScreen({ navigation }) {
                 />
                 <Text style={styles.error}>{loginError}</Text>
                 <Button func={onLogin}>Log in</Button>
+                <Button style={styles.forgot} func={onPasswordReset}>
+                    Forgot Password
+                </Button>
                 <Button
                     func={() => {
                         navigation.navigate("RegisterStack");
@@ -50,6 +66,12 @@ export function LoginScreen({ navigation }) {
                     Create new account
                 </Button>
             </View>
+
+            {passwordReset && (
+                <View style={styles.passwordResetCard}>
+                    <Text>{passwordReset}</Text>
+                </View>
+            )}
         </KeyboardAvoidingView>
     );
 }
@@ -59,6 +81,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         justifyContent: "center",
+    },
+    forgot: {
+        marginBottom: 50,
+        marginTop: 10,
     },
     navbar: {
         justifyContent: "space-evenly",
@@ -95,12 +121,20 @@ const styles = StyleSheet.create({
         height: 200,
         marginBottom: 50,
     },
-    forgotPass: {
-        textAlign: "center",
-        marginBottom: 50,
-    },
     error: {
         color: "red",
         alignSelf: "center",
+    },
+    passwordResetCard: {
+        height: 60,
+        width: "95%",
+        backgroundColor: "#FFFFFF",
+        position: "absolute",
+        bottom: 10,
+        alignSelf: "center",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center",
     },
 });
