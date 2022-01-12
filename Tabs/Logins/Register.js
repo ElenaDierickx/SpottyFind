@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Image } from "react-native";
+import { StyleSheet, Text, View, TextInput, Image, KeyboardAvoidingView } from "react-native";
 import { Button } from "../Components/Button";
 import { createUser } from "../../utils/Authorisation";
 
@@ -20,7 +20,7 @@ export function RegisterScreen({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container}>
             <StatusBar style="auto" />
             <View>
                 <Image style={styles.logo} source={require("./../../img/logo.png")} />
@@ -53,7 +53,7 @@ export function RegisterScreen({ navigation }) {
                 <Text style={styles.already}>Already have an account?</Text>
                 <Button func={() => navigation.navigate("LoginStack")}>Log in</Button>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

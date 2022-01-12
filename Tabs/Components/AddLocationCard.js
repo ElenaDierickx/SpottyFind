@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Pressable, Image } from "react-native";
+import { StyleSheet, View, Text, TextInput, Pressable, Image, KeyboardAvoidingView } from "react-native";
 import { CardButton } from "./Button";
 import { Ionicons } from "@expo/vector-icons";
 import { addLocationImage } from "../../utils/Imaging";
@@ -37,7 +37,7 @@ export function AddLocationCard(props) {
         : (imageContent = <Ionicons style={styles.cameraIcon} name="camera-outline"></Ionicons>);
 
     return (
-        <View style={styles.addLocationCard}>
+        <KeyboardAvoidingView style={styles.addLocationCard}>
             <TextInput placeholder="Title" onChangeText={(title) => setTitle(title)} defaultValue={title} style={styles.input} maxLength={12} />
             <Pressable
                 onPress={() => {
@@ -60,7 +60,7 @@ export function AddLocationCard(props) {
                 <CardButton func={props.backFunc}>Back</CardButton>
                 <CardButton func={create}>Place</CardButton>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

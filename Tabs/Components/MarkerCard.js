@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, ProgressBarAndroidComponent } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, KeyboardAvoidingView } from "react-native";
 import { postReview, getReviews, getReviewScore, hasReview, updateReview, updateMarker, deleteMarker } from "../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton } from "./Button";
@@ -88,7 +88,7 @@ export function MarkerCard(props) {
     };
 
     return (
-        <View style={styles.markerCard}>
+        <KeyboardAvoidingView style={styles.markerCard}>
             <View style={styles.topView}>
                 <View>
                     <Text style={styles.title}>{props.marker.title}</Text>
@@ -172,7 +172,7 @@ export function MarkerCard(props) {
                     delete={props.deleteMarker}
                 />
             )}
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

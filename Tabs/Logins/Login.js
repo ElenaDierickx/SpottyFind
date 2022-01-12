@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert } from "react-native";
+import { StyleSheet, Text, View, TextInput, Image, Pressable, Alert, KeyboardAvoidingView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button, GoToButton } from "./../Components/Button";
 import { loginUser } from "../../utils/Authorisation";
@@ -20,7 +20,7 @@ export function LoginScreen({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container}>
             <StatusBar style="auto" />
             <View>
                 <Image style={styles.logo} source={require("./../../img/logo.png")} />
@@ -50,7 +50,7 @@ export function LoginScreen({ navigation }) {
                     Create new account
                 </Button>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

@@ -44,17 +44,24 @@ export default function App() {
         setUser(user);
     });
 
+    var navigationRef;
+
     useEffect(() => {
         if (user) {
             getUnseenNotifications();
             // This listener is fired whenever a notification is received while the app is foregrounded
             notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
-                console.log(notification);
+                console.log("d");
+                if (notifications != null) {
+                    setNotifications(notifications + 1);
+                } else {
+                    setNotifications(1);
+                }
             });
 
             // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
             responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-                console.log(response);
+                // navigationRef.navigate("Notifications");
             });
 
             return () => {
@@ -66,7 +73,7 @@ export default function App() {
 
     if (user) {
         return (
-            <NavigationContainer>
+            <NavigationContainer ref={navigationRef}>
                 <Tab.Navigator activeColor="#2CCB33" barStyle={{ backgroundColor: "#FFFFFF" }}>
                     <Tab.Screen
                         name="Map"
