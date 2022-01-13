@@ -51,17 +51,12 @@ export default function App() {
             getUnseenNotifications();
             // This listener is fired whenever a notification is received while the app is foregrounded
             notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
-                console.log("d");
-                if (notifications != null) {
-                    setNotifications(notifications + 1);
-                } else {
-                    setNotifications(1);
-                }
+                getUnseenNotifications();
             });
 
             // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
             responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-                // navigationRef.navigate("Notifications");
+                getUnseenNotifications();
             });
 
             return () => {

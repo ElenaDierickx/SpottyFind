@@ -62,6 +62,56 @@ export const getMarkers = async (filter) => {
                 markers.push(marker);
             });
         });
+    } else if (filter == "4stars") {
+        const allmarkers = await Firebase.firestore().collection("markers").get();
+        var markerlist = [];
+        allmarkers.forEach((marker) => {
+            markerlist.push(marker);
+        });
+
+        var markers = [];
+        for (var marker of markerlist) {
+            var reviewList = [];
+            const reviews = await Firebase.firestore().collection("markers").doc(marker.id).collection("reviews").get();
+            reviews.forEach((review) => {
+                reviewList.push(review.data());
+            });
+            var score = 0;
+            for (var review of reviewList) {
+                score = score + review.score;
+            }
+            if (reviewList.length >= 1) {
+                score = score / reviewList.length;
+                if (score >= 4) {
+                    markers.push(marker);
+                }
+            }
+        }
+    } else if (filter == "3stars") {
+        const allmarkers = await Firebase.firestore().collection("markers").get();
+        var markerlist = [];
+        allmarkers.forEach((marker) => {
+            markerlist.push(marker);
+        });
+
+        var markers = [];
+        for (var marker of markerlist) {
+            var reviewList = [];
+            const reviews = await Firebase.firestore().collection("markers").doc(marker.id).collection("reviews").get();
+            reviews.forEach((review) => {
+                reviewList.push(review.data());
+            });
+            var score = 0;
+            for (var review of reviewList) {
+                score = score + review.score;
+            }
+            if (reviewList.length >= 1) {
+                score = score / reviewList.length;
+                if (score >= 3) {
+                    markers.push(marker);
+                }
+            }
+        }
     }
 
     const userImagePromises = [];
@@ -137,8 +187,8 @@ export const getReviewScore = async (markerid) => {
     reviews.forEach((review) => {
         score += review.data().score;
     });
-    score = score / reviews.size;
-    score = Math.round(score);
+    score = (score / reviews.size) * 100;
+    score = Math.round(score) / 100;
 
     return score;
 };

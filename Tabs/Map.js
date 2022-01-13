@@ -107,7 +107,6 @@ export function Map({ route, navigation }) {
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
-
             <MapView
                 moveOnMarkerPress={false}
                 showsMyLocationButton={false}
@@ -162,23 +161,22 @@ export function Map({ route, navigation }) {
                         );
                     })}
             </MapView>
-
-            {Firebase.auth().currentUser && (
-                <View style={styles.filterContainer}>
-                    <Picker
-                        selectedValue={selectedFilter}
-                        style={styles.filter}
-                        itemStyle={styles.filteritem}
-                        onValueChange={(itemValue, itemIndex) => {
-                            setSelectedFilter(itemValue);
-                            gettingMarkers(itemValue);
-                        }}
-                    >
-                        <Picker.Item label="All" value="all" />
-                        <Picker.Item label="Following" value="following" />
-                    </Picker>
-                </View>
-            )}
+            <View style={styles.filterContainer}>
+                <Picker
+                    selectedValue={selectedFilter}
+                    style={styles.filter}
+                    itemStyle={styles.filteritem}
+                    onValueChange={(itemValue, itemIndex) => {
+                        setSelectedFilter(itemValue);
+                        gettingMarkers(itemValue);
+                    }}
+                >
+                    <Picker.Item label="All" value="all" />
+                    {Firebase.auth().currentUser && <Picker.Item label="Following" value="following" />}
+                    <Picker.Item label="Min. 4 Stars" value="4stars" />
+                    <Picker.Item label="Min. 3 Stars" value="3stars" />
+                </Picker>
+            </View>
 
             <LocationButton
                 onPress={async () => {
@@ -200,7 +198,6 @@ export function Map({ route, navigation }) {
                     }}
                 />
             )}
-
             {addLocationOn && (
                 <AddLocationCard
                     backFunc={() => {
@@ -209,7 +206,6 @@ export function Map({ route, navigation }) {
                     }}
                 />
             )}
-
             {markerCard && disabledMap && (
                 <MarkerCard
                     marker={markerCard}
@@ -224,7 +220,6 @@ export function Map({ route, navigation }) {
                     navigation={navigation}
                 />
             )}
-
             {errorMessage && (
                 <View style={styles.errorCard}>
                     <Text>{errorMessage}</Text>
