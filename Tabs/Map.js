@@ -45,11 +45,11 @@ export function Map({ route, navigation }) {
     };
 
     const gettingMarkers = async (filter) => {
-        if (!Firebase.auth().currentUser) {
-            var markers = await getMarkers("all");
-        } else if (filter) {
+        if (filter) {
+            console.log(filter);
             var markers = await getMarkers(filter);
         } else {
+            console.log(selectedFilter);
             var markers = await getMarkers(selectedFilter);
         }
         setMarkers(markers);
@@ -172,9 +172,9 @@ export function Map({ route, navigation }) {
                     }}
                 >
                     <Picker.Item label="All" value="all" />
+                    <Picker.Item label=">4 Stars" value="4stars" />
+                    <Picker.Item label=">3 Stars" value="3stars" />
                     {Firebase.auth().currentUser && <Picker.Item label="Following" value="following" />}
-                    <Picker.Item label="Min. 4 Stars" value="4stars" />
-                    <Picker.Item label="Min. 3 Stars" value="3stars" />
                 </Picker>
             </View>
 
@@ -207,7 +207,7 @@ export function Map({ route, navigation }) {
                     succes={() => {
                         setDisabledMap(true);
                         setaddLocationOn(false);
-                        gettingMarkers(filter);
+                        gettingMarkers();
                     }}
                 />
             )}
@@ -227,7 +227,7 @@ export function Map({ route, navigation }) {
             )}
             {errorMessage && (
                 <View style={styles.errorCard}>
-                    <Text>{errorMessage}</Text>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
                 </View>
             )}
         </View>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     errorCard: {
         height: 60,
         width: "95%",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "rgba(230, 0, 0, 0.4)",
         position: "absolute",
         bottom: 10,
         alignSelf: "center",
@@ -255,6 +255,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         alignContent: "center",
+        borderColor: "red",
+        borderWidth: 2,
+    },
+    errorMessage: {
+        color: "white",
+        fontSize: 16,
     },
     filter: {
         color: "#FFFFFF",

@@ -53,7 +53,11 @@ export function LoginScreen({ navigation }) {
                     style={styles.input}
                     secureTextEntry={true}
                 />
-                <Text style={styles.error}>{loginError}</Text>
+                {loginError != "" && (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.error}>{loginError}</Text>
+                    </View>
+                )}
                 <Button func={onLogin}>Log in</Button>
                 <Button style={styles.forgot} func={onPasswordReset}>
                     Forgot Password
@@ -121,8 +125,21 @@ const styles = StyleSheet.create({
         height: 200,
         marginBottom: 50,
     },
+    errorContainer: {
+        height: 60,
+        width: "95%",
+        backgroundColor: "rgba(230, 0, 0, 0.4)",
+        alignSelf: "center",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        borderColor: "red",
+        borderWidth: 2,
+        marginBottom: 10,
+    },
     error: {
-        color: "red",
+        color: "white",
         alignSelf: "center",
     },
     passwordResetCard: {
