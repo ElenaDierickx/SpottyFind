@@ -1,48 +1,48 @@
 {
-    "project_info": {
-        "project_number": "587867110235",
-        "firebase_url": "https://spottyfind-default-rtdb.europe-west1.firebasedatabase.app",
-        "project_id": "spottyfind",
-        "storage_bucket": "spottyfind.appspot.com"
-    },
-    "client": [
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:587867110235:android:cc413501b2f92b5c09f87e",
-                "android_client_info": {
-                    "package_name": "com.zeekoe.spottyfind"
-                }
-            },
-            "oauth_client": [
-                {
-                    "client_id": "587867110235-vpi5kor8kbp4nmla8sva6i17m626jmqe.apps.googleusercontent.com",
-                    "client_type": 1,
-                    "android_info": {
-                        "package_name": "com.zeekoe.spottyfind",
-                        "certificate_hash": "ef691e9b7d6cbb5018e4d98007356ac4813fbc0e"
-                    }
-                },
-                {
-                    "client_id": "587867110235-nmi1ho7i15uh477i819t1kkee8th7cp2.apps.googleusercontent.com",
-                    "client_type": 3
-                }
-            ],
-            "api_key": [
-                {
-                    "current_key": "AIzaSyCYQa881E4BoFyJ50iqcPSqDv2OmKSTjkI"
-                }
-            ],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [
-                        {
-                            "client_id": "587867110235-nmi1ho7i15uh477i819t1kkee8th7cp2.apps.googleusercontent.com",
-                            "client_type": 3
-                        }
-                    ]
-                }
-            }
+  "project_info": {
+    "project_number": "587867110235",
+    "firebase_url": "https://spottyfind-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "spottyfind",
+    "storage_bucket": "spottyfind.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587867110235:android:cc413501b2f92b5c09f87e",
+        "android_client_info": {
+          "package_name": "com.zeekoe.spottyfind"
         }
-    ],
-    "configuration_version": "1"
+      },
+      "oauth_client": [
+        {
+          "client_id": "587867110235-vpi5kor8kbp4nmla8sva6i17m626jmqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zeekoe.spottyfind",
+            "certificate_hash": "ef691e9b7d6cbb5018e4d98007356ac4813fbc0e"
+          }
+        },
+        {
+          "client_id": "587867110235-nmi1ho7i15uh477i819t1kkee8th7cp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUp5F7V604wQUFANv0mEXkRkjbsdsMU9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587867110235-nmi1ho7i15uh477i819t1kkee8th7cp2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }

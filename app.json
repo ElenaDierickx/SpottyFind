@@ -13,7 +13,7 @@
         ],
         "name": "SpottyFind",
         "slug": "spottyfind",
-        "version": "1.0.5",
+        "version": "1.0.6",
         "orientation": "portrait",
         "icon": "./img/logo.png",
         "splash": {
@@ -29,8 +29,7 @@
             "supportsTablet": true
         },
         "android": {
-            "permissions": ["NOTIFICATIONS"],
-            "versionCode": 6,
+            "versionCode": 7,
             "adaptiveIcon": {
                 "foregroundImage": "./img/logo.png",
                 "backgroundColor": "#FFFFFF"
