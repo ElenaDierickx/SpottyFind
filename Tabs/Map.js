@@ -204,6 +204,11 @@ export function Map({ route, navigation }) {
                         setDisabledMap(true);
                         setaddLocationOn(false);
                     }}
+                    succes={() => {
+                        setDisabledMap(true);
+                        setaddLocationOn(false);
+                        gettingMarkers(filter);
+                    }}
                 />
             )}
             {markerCard && disabledMap && (
