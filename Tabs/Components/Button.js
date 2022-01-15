@@ -118,11 +118,9 @@ const styles = StyleSheet.create({
     },
     cardButton: {
         backgroundColor: "#2CCB33",
-        borderRadius: 5,
+        borderRadius: 10,
         height: 40,
         width: 100,
-        paddingLeft: 5,
-        marginBottom: 10,
         justifyContent: "center",
     },
     smallButtonText: {

@@ -2,14 +2,15 @@ import { StatusBar } from "expo-status-bar";
 import React, { useRef, useState, useEffect } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
-import { StyleSheet, View, Dimensions, Alert, Text, Picker } from "react-native";
+import { StyleSheet, View, Text, Picker, Modal, Touchable, Pressable } from "react-native";
 import { LocationButton, AddLocationButton } from "./Components/Button";
 import { AddLocationCard } from "./Components/AddLocationCard";
 import { deleteMarker, getMarkers } from "../utils/MapHelper";
 import { MarkerCard } from "./Components/MarkerCard";
 import Firebase from "../Config/Firebase";
 import { useFocusEffect } from "@react-navigation/native";
-import { createPortal } from "react-dom";
+import { IntroModal } from "./Components/IntroModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const map = React.createRef();
 
@@ -22,6 +23,21 @@ export function Map({ route, navigation }) {
     const { initialMarker } = route.params;
     const [errorMessage, setErrorMessage] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState("all");
+    const [modalVisibility, setModalVisibility] = useState(null);
+
+    const getIntro = async () => {
+        const value = await AsyncStorage.getItem("@intro");
+        if (value !== null) {
+            setModalVisibility(!value);
+        } else {
+            setModalVisibility(true);
+        }
+    };
+
+    const introDone = async () => {
+        setModalVisibility(false);
+        await AsyncStorage.setItem("@intro", "true");
+    };
 
     const mapToLocation = (location, offset) => {
         var r;
@@ -59,6 +75,7 @@ export function Map({ route, navigation }) {
         React.useCallback(() => {
             getLocation();
             gettingMarkers();
+            getIntro();
         }, [])
     );
 
@@ -229,6 +246,14 @@ export function Map({ route, navigation }) {
                 <View style={styles.errorCard}>
                     <Text style={styles.errorMessage}>{errorMessage}</Text>
                 </View>
+            )}
+
+            {modalVisibility && (
+                <IntroModal
+                    close={() => {
+                        introDone();
+                    }}
+                />
             )}
         </View>
     );
