@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, Alert } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable, TextInput, ScrollView, Alert, KeyboardAvoidingView } from "react-native";
 import { postReview, getReviews, getReviewScore, hasReview, updateReview } from "../../../utils/MapHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { CardButton, UserButton } from "../Button";
@@ -18,43 +18,50 @@ export function EditMarker(props) {
             },
         ]);
     };
+
     return (
-        <View>
-            <CardButton style={styles.deleteButton} func={deleteMarker}>
-                Delete
-            </CardButton>
-            <Text style={styles.subtitle}>Edit Marker</Text>
+        <KeyboardAvoidingView style={styles.container}>
             <View>
-                <Text>Title</Text>
-                <TextInput
-                    placeholder="Title"
-                    onChangeText={(title) => props.setMarkerTitle(title)}
-                    defaultValue={props.title}
-                    style={styles.input}
-                    maxLength={30}
-                />
-                <Text>Description</Text>
-                <TextInput
-                    placeholder="Description"
-                    onChangeText={(description) => props.setMarkerDescription(description)}
-                    defaultValue={props.description}
-                    style={styles.description}
-                    multiline={true}
-                    maxLength={120}
-                />
+                <CardButton style={styles.deleteButton} func={deleteMarker}>
+                    Delete
+                </CardButton>
+                <Text style={styles.subtitle}>Edit Marker</Text>
+                <View>
+                    <Text>Title</Text>
+                    <TextInput
+                        placeholder="Title"
+                        onChangeText={(title) => props.setMarkerTitle(title)}
+                        defaultValue={props.title}
+                        style={styles.input}
+                        maxLength={30}
+                    />
+                    <Text>Description</Text>
+                    <TextInput
+                        placeholder="Description"
+                        onChangeText={(description) => props.setMarkerDescription(description)}
+                        defaultValue={props.description}
+                        style={styles.description}
+                        multiline={true}
+                        maxLength={120}
+                    />
+                </View>
+                {props.error != "" && (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.error}>{props.error}</Text>
+                    </View>
+                )}
             </View>
             <View style={styles.buttons}>
                 <CardButton func={props.back}>Back</CardButton>
                 <CardButton func={props.edit}>Edit</CardButton>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
     buttons: {
         flexDirection: "row",
-        marginTop: 75,
         justifyContent: "space-between",
     },
     input: {
@@ -67,7 +74,23 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginTop: 3,
     },
-
+    errorContainer: {
+        height: 40,
+        width: "95%",
+        backgroundColor: "rgba(230, 0, 0, 0.4)",
+        alignSelf: "center",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        borderColor: "red",
+        borderWidth: 2,
+        marginTop: 10,
+    },
+    error: {
+        color: "black",
+        alignSelf: "center",
+    },
     description: {
         backgroundColor: "rgba(231, 231, 231, 0.2)",
         borderRadius: 10,
@@ -88,5 +111,9 @@ const styles = StyleSheet.create({
     deleteButton: {
         marginTop: 15,
         width: "100%",
+    },
+    container: {
+        justifyContent: "space-between",
+        height: 460,
     },
 });

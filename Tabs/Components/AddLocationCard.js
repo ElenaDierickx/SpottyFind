@@ -38,24 +38,30 @@ export function AddLocationCard(props) {
 
     return (
         <KeyboardAvoidingView style={styles.addLocationCard}>
-            <TextInput placeholder="Title" onChangeText={(title) => setTitle(title)} defaultValue={title} style={styles.input} maxLength={12} />
-            <Pressable
-                onPress={() => {
-                    pressedImage();
-                }}
-                style={styles.cameraPlaceholder}
-            >
-                {imageContent}
-            </Pressable>
-            <TextInput
-                placeholder="Description"
-                onChangeText={(description) => setDescription(description)}
-                defaultValue={description}
-                style={styles.description}
-                multiline={true}
-                maxLength={120}
-            />
-            <Text>{errorText}</Text>
+            <View>
+                <TextInput placeholder="Title" onChangeText={(title) => setTitle(title)} defaultValue={title} style={styles.input} maxLength={12} />
+                <Pressable
+                    onPress={() => {
+                        pressedImage();
+                    }}
+                    style={styles.cameraPlaceholder}
+                >
+                    {imageContent}
+                </Pressable>
+                <TextInput
+                    placeholder="Description"
+                    onChangeText={(description) => setDescription(description)}
+                    defaultValue={description}
+                    style={styles.description}
+                    multiline={true}
+                    maxLength={120}
+                />
+                {errorText != "" && (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.error}>{errorText}</Text>
+                    </View>
+                )}
+            </View>
             <View style={styles.buttons}>
                 <CardButton func={props.backFunc}>Back</CardButton>
                 <CardButton func={create}>Place</CardButton>
@@ -66,7 +72,7 @@ export function AddLocationCard(props) {
 
 const styles = StyleSheet.create({
     addLocationCard: {
-        height: 460,
+        height: 500,
         width: "95%",
         backgroundColor: "#FFFFFF",
         position: "absolute",
@@ -75,6 +81,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 20,
         alignContent: "center",
+        justifyContent: "space-between",
     },
 
     input: {
@@ -85,7 +92,23 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         width: "95%",
     },
-
+    errorContainer: {
+        height: 40,
+        width: "95%",
+        backgroundColor: "rgba(230, 0, 0, 0.4)",
+        alignSelf: "center",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        borderColor: "red",
+        borderWidth: 2,
+        marginTop: 10,
+    },
+    error: {
+        color: "black",
+        alignSelf: "center",
+    },
     cameraPlaceholder: {
         backgroundColor: "#C4C4C4",
         height: 150,

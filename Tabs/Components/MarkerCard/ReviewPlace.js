@@ -7,71 +7,78 @@ import Firebase from "../../../Config/Firebase";
 
 export function ReviewPlace(props) {
     return (
-        <View>
-            <Text style={styles.subtitle}>
-                {props.hasReviewed && "Edit"}
-                {!props.hasReviewed && "Place"} Review
-            </Text>
-            <View style={styles.starsReview}>
-                {props.stars >= 1 && (
-                    <Pressable onPress={() => props.setStars(1)}>
-                        <Ionicons style={styles.starReview} name="star"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars < 1 && (
-                    <Pressable onPress={() => props.setStars(1)}>
-                        <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars >= 2 && (
-                    <Pressable onPress={() => props.setStars(2)}>
-                        <Ionicons style={styles.starReview} name="star"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars < 2 && (
-                    <Pressable onPress={() => props.setStars(2)}>
-                        <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars >= 3 && (
-                    <Pressable onPress={() => props.setStars(3)}>
-                        <Ionicons style={styles.starReview} name="star"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars < 3 && (
-                    <Pressable onPress={() => props.setStars(3)}>
-                        <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars >= 4 && (
-                    <Pressable onPress={() => props.setStars(4)}>
-                        <Ionicons style={styles.starReview} name="star"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars < 4 && (
-                    <Pressable onPress={() => props.setStars(4)}>
-                        <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars >= 5 && (
-                    <Pressable onPress={() => props.setStars(5)}>
-                        <Ionicons style={styles.starReview} name="star"></Ionicons>
-                    </Pressable>
-                )}
-                {props.stars < 5 && (
-                    <Pressable onPress={() => props.setStars(5)}>
-                        <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
-                    </Pressable>
+        <View style={styles.container}>
+            <View>
+                <Text style={styles.subtitle}>
+                    {props.hasReviewed && "Edit"}
+                    {!props.hasReviewed && "Place"} Review
+                </Text>
+                <View style={styles.starsReview}>
+                    {props.stars >= 1 && (
+                        <Pressable onPress={() => props.setStars(1)}>
+                            <Ionicons style={styles.starReview} name="star"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars < 1 && (
+                        <Pressable onPress={() => props.setStars(1)}>
+                            <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars >= 2 && (
+                        <Pressable onPress={() => props.setStars(2)}>
+                            <Ionicons style={styles.starReview} name="star"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars < 2 && (
+                        <Pressable onPress={() => props.setStars(2)}>
+                            <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars >= 3 && (
+                        <Pressable onPress={() => props.setStars(3)}>
+                            <Ionicons style={styles.starReview} name="star"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars < 3 && (
+                        <Pressable onPress={() => props.setStars(3)}>
+                            <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars >= 4 && (
+                        <Pressable onPress={() => props.setStars(4)}>
+                            <Ionicons style={styles.starReview} name="star"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars < 4 && (
+                        <Pressable onPress={() => props.setStars(4)}>
+                            <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars >= 5 && (
+                        <Pressable onPress={() => props.setStars(5)}>
+                            <Ionicons style={styles.starReview} name="star"></Ionicons>
+                        </Pressable>
+                    )}
+                    {props.stars < 5 && (
+                        <Pressable onPress={() => props.setStars(5)}>
+                            <Ionicons style={styles.starReview} name="star-outline"></Ionicons>
+                        </Pressable>
+                    )}
+                </View>
+                <TextInput
+                    placeholder="Review"
+                    onChangeText={(reviewText) => props.setReviewText(reviewText)}
+                    defaultValue={props.reviewText}
+                    style={styles.input}
+                    multiline={true}
+                    maxLength={120}
+                />
+                {props.error != "" && (
+                    <View style={styles.errorContainer}>
+                        <Text style={styles.error}>{props.error}</Text>
+                    </View>
                 )}
             </View>
-            <TextInput
-                placeholder="Review"
-                onChangeText={(reviewText) => props.setReviewText(reviewText)}
-                defaultValue={props.reviewText}
-                style={styles.input}
-                multiline={true}
-                maxLength={120}
-            />
             <View style={styles.buttons}>
                 <CardButton func={props.back}>Back</CardButton>
                 {props.hasReviewed && <CardButton func={props.editReview}>Edit</CardButton>}
@@ -106,7 +113,6 @@ const styles = StyleSheet.create({
     },
     buttons: {
         flexDirection: "row",
-        marginTop: 90,
         justifyContent: "space-between",
     },
     input: {
@@ -123,5 +129,26 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 20,
         fontWeight: "bold",
+    },
+    errorContainer: {
+        height: 40,
+        width: "95%",
+        backgroundColor: "rgba(230, 0, 0, 0.4)",
+        alignSelf: "center",
+        borderRadius: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        alignContent: "center",
+        borderColor: "red",
+        borderWidth: 2,
+        marginTop: 10,
+    },
+    error: {
+        color: "black",
+        alignSelf: "center",
+    },
+    container: {
+        justifyContent: "space-between",
+        height: 460,
     },
 });

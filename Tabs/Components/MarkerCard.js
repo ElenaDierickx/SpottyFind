@@ -25,6 +25,8 @@ export function MarkerCard(props) {
     const [description, setDescription] = useState(props.marker.description);
     const [loadDetails, setLoadDetails] = useState(true);
     const [loadReviews, setLoadReviews] = useState(true);
+    const [editError, setEditError] = useState("");
+    const [reviewError, setReviewError] = useState("");
 
     const imageToLoad = image ? { uri: image } : require("./../../img/account.png");
 
@@ -58,17 +60,27 @@ export function MarkerCard(props) {
     };
 
     const placeReview = () => {
-        postReview(props.marker.id, stars, reviewText);
-        setReview(false);
-        getReviewList();
-        onRender();
+        if (reviewText != "") {
+            setReviewError("");
+            postReview(props.marker.id, stars, reviewText);
+            setReview(false);
+            getReviewList();
+            onRender();
+        } else {
+            setReviewError("Please fill in a description.");
+        }
     };
 
     const editReview = () => {
-        updateReview(props.marker.id, hasReviewed.id, stars, reviewText);
-        setReview(false);
-        getReviewList();
-        onRender();
+        if (reviewText != "") {
+            setReviewError("");
+            updateReview(props.marker.id, hasReviewed.id, stars, reviewText);
+            setReview(false);
+            getReviewList();
+            onRender();
+        } else {
+            setReviewError("Please fill in a description.");
+        }
     };
 
     useEffect(() => {
@@ -119,6 +131,7 @@ export function MarkerCard(props) {
                         setReview(false);
                         getReviewList();
                     }}
+                    error={reviewError}
                     editReview={editReview}
                     placeReview={placeReview}
                     reviewText={reviewText}
@@ -163,11 +176,17 @@ export function MarkerCard(props) {
                     }}
                     title={title}
                     description={description}
+                    error={editError}
                     edit={() => {
-                        updateMarker(props.marker.id, title, description);
-                        setEditMarker(false);
-                        props.marker.title = title;
-                        props.marker.description = description;
+                        if (title != "" && description != "") {
+                            setEditError("");
+                            updateMarker(props.marker.id, title, description);
+                            setEditMarker(false);
+                            props.marker.title = title;
+                            props.marker.description = description;
+                        } else {
+                            setEditError("Please fill in all fields.");
+                        }
                     }}
                     delete={props.deleteMarker}
                 />

@@ -29,13 +29,18 @@ export function Map({ route, navigation }) {
         const value = await AsyncStorage.getItem("@intro");
         if (value !== null) {
             setModalVisibility(!value);
+            if (value == "true") {
+                setDisabledMap(true);
+            }
         } else {
             setModalVisibility(true);
+            setDisabledMap(false);
         }
     };
 
     const introDone = async () => {
         setModalVisibility(false);
+        setDisabledMap(true);
         await AsyncStorage.setItem("@intro", "true");
     };
 
@@ -62,10 +67,8 @@ export function Map({ route, navigation }) {
 
     const gettingMarkers = async (filter) => {
         if (filter) {
-            console.log(filter);
             var markers = await getMarkers(filter);
         } else {
-            console.log(selectedFilter);
             var markers = await getMarkers(selectedFilter);
         }
         setMarkers(markers);
@@ -74,7 +77,8 @@ export function Map({ route, navigation }) {
     useFocusEffect(
         React.useCallback(() => {
             getLocation();
-            gettingMarkers();
+            setSelectedFilter("all");
+            gettingMarkers("all");
             getIntro();
         }, [])
     );
